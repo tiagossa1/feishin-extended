@@ -9,9 +9,13 @@
         "react",
         "electron"
     ],
-    "homepage": "https://github.com/jeffvli/feishin",
+    "homepage": "https://github.com/tiagossa1/feishin",
     "bugs": {
-        "url": "https://github.com/jeffvli/feishin/issues"
+        "url": "https://github.com/tiagossa1/feishin/issues"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/tiagossa1/feishin.git"
     },
     "license": "GPL-3.0",
     "author": {

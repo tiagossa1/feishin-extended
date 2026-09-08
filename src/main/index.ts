@@ -57,7 +57,7 @@ const ALPHA_UPDATER_CONFIG: {
 };
 
 const GITHUB_UPDATER_CONFIG = {
-    owner: 'jeffvli',
+    owner: 'tiagossa1',
     provider: 'github' as const,
     repo: 'feishin',
 };
@@ -864,7 +864,7 @@ async function createWindow(first = true): Promise<void> {
     });
 
     if (isWindows()) {
-        app.setAppUserModelId('org.jeffvli.feishin');
+        app.setAppUserModelId('com.tiagossa1.feishin-extended');
     }
 
     menuBuilder = new MenuBuilder(mainWindow);

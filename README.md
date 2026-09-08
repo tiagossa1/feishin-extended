@@ -1,6 +1,13 @@
 <img src="assets/icons/icon.png" alt="logo" title="feishin" align="right" height="60px" width="60px" />
 
-# Feishin
+# Feishin Extended
+
+> **This is a personal fork of [jeffvli/feishin](https://github.com/jeffvli/feishin)**, an excellent
+> self-hosted music player created and maintained by [jeffvli](https://github.com/jeffvli) and
+> contributors. All credit for the original project goes to them. This fork adds a few extra
+> features I wanted (currently: pitch shift without changing playback speed) and is not affiliated
+> with, published to, or endorsed by the upstream project.
+
 
   <p align="center">
     <a href="https://github.com/jeffvli/feishin/blob/main/LICENSE">

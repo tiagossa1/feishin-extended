@@ -192,7 +192,7 @@ export default class MenuBuilder {
                                   this.mainWindow.show();
                                   this.mainWindow.focus();
                               },
-                              label: 'Feishin',
+                              label: 'Feishin Extended',
                           },
                       ]
                     : undefined,
@@ -322,27 +322,27 @@ export default class MenuBuilder {
             submenu: [
                 {
                     click() {
-                        shell.openExternal('https://github.com/jeffvli/feishin');
+                        shell.openExternal('https://github.com/tiagossa1/feishin');
                     },
                     label: 'Learn More',
                 },
                 {
                     click() {
                         shell.openExternal(
-                            'https://github.com/jeffvli/feishin?tab=readme-ov-file#getting-started',
+                            'https://github.com/tiagossa1/feishin?tab=readme-ov-file#getting-started',
                         );
                     },
                     label: 'Documentation',
                 },
                 {
                     click() {
-                        shell.openExternal('https://github.com/jeffvli/feishin/discussions');
+                        shell.openExternal('https://github.com/tiagossa1/feishin/discussions');
                     },
                     label: 'Community Discussions',
                 },
                 {
                     click() {
-                        shell.openExternal('https://github.com/jeffvli/feishin/issues');
+                        shell.openExternal('https://github.com/tiagossa1/feishin/issues');
                     },
                     label: 'Search Issues',
                 },
@@ -439,27 +439,27 @@ export default class MenuBuilder {
                 submenu: [
                     {
                         click() {
-                            shell.openExternal('https://github.com/jeffvli/feishin');
+                            shell.openExternal('https://github.com/tiagossa1/feishin');
                         },
                         label: 'Learn More',
                     },
                     {
                         click() {
                             shell.openExternal(
-                                'https://github.com/jeffvli/feishin?tab=readme-ov-file#getting-started',
+                                'https://github.com/tiagossa1/feishin?tab=readme-ov-file#getting-started',
                             );
                         },
                         label: 'Documentation',
                     },
                     {
                         click() {
-                            shell.openExternal('https://github.com/jeffvli/feishin/discussions');
+                            shell.openExternal('https://github.com/tiagossa1/feishin/discussions');
                         },
                         label: 'Community Discussions',
                     },
                     {
                         click() {
-                            shell.openExternal('https://github.com/jeffvli/feishin/issues');
+                            shell.openExternal('https://github.com/tiagossa1/feishin/issues');
                         },
                         label: 'Search Issues',
                     },

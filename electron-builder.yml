@@ -1,5 +1,5 @@
-appId: org.jeffvli.feishin
-productName: Feishin
+appId: com.tiagossa1.feishin-extended
+productName: Feishin Extended
 artifactName: ${productName}-${version}-${os}-${arch}.${ext}
 electronVersion: 43.4.1
 directories:
@@ -69,7 +69,7 @@ npmRebuild: false
 afterAllArtifactBuild: scripts/after-all-artifact-build.mjs
 publish:
     provider: github
-    owner: jeffvli
+    owner: tiagossa1
     repo: feishin
     channel: latest
     releaseType: draft
