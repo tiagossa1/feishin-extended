@@ -38,6 +38,7 @@ export const AddToPlaylistAction = ({ items, itemType }: AddToPlaylistActionProp
     const serverId = useCurrentServerId();
     const queryClient = useQueryClient();
     const [searchTerm, setSearchTerm] = useState('');
+    const [addedPlaylistIds, setAddedPlaylistIds] = useState<Set<string>>(new Set());
     const [skipDuplicates, setSkipDuplicates] = useLocalStorage({
         defaultValue: true,
         key: 'playlist-skip-duplicate',
@@ -165,7 +166,10 @@ export const AddToPlaylistAction = ({ items, itemType }: AddToPlaylistActionProp
     );
 
     const handleAddToPlaylist = useCallback(
-        async (playlistId: string, playlistName: string) => {
+        async (event: Event, playlistId: string, playlistName: string) => {
+            // Keep the context menu open so the user can add to multiple playlists in a row
+            event.preventDefault();
+
             if (items.length === 0 || !serverId) return;
 
             try {
@@ -264,7 +268,9 @@ export const AddToPlaylistAction = ({ items, itemType }: AddToPlaylistActionProp
                                 title: t('error.genericError'),
                             });
                         },
-                        onSuccess: () => {},
+                        onSuccess: () => {
+                            setAddedPlaylistIds((prev) => new Set(prev).add(playlistId));
+                        },
                     },
                 );
 
@@ -400,9 +406,10 @@ export const AddToPlaylistAction = ({ items, itemType }: AddToPlaylistActionProp
                 {recentPlaylist && (
                     <>
                         <ContextMenu.Item
+                            isSelected={addedPlaylistIds.has(recentPlaylist.id)}
                             key={recentPlaylist.id}
-                            onSelect={() =>
-                                handleAddToPlaylist(recentPlaylist.id, recentPlaylist.name)
+                            onSelect={(event) =>
+                                handleAddToPlaylist(event, recentPlaylist.id, recentPlaylist.name)
                             }
                         >
                             {recentPlaylist.name}
@@ -415,8 +422,9 @@ export const AddToPlaylistAction = ({ items, itemType }: AddToPlaylistActionProp
                 )}
                 {filteredPlaylists.map((playlist) => (
                     <ContextMenu.Item
+                        isSelected={addedPlaylistIds.has(playlist.id)}
                         key={playlist.id}
-                        onSelect={() => handleAddToPlaylist(playlist.id, playlist.name)}
+                        onSelect={(event) => handleAddToPlaylist(event, playlist.id, playlist.name)}
                     >
                         {playlist.name}
                     </ContextMenu.Item>
