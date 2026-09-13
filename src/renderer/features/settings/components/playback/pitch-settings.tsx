@@ -21,23 +21,23 @@ import { PlayerType } from '/@/shared/types/types';
 
 const mpvPlayer = isElectron() ? window.api.mpvPlayer : null;
 
-const SEMITONE_MIN = -12;
-const SEMITONE_MAX = 12;
+export const SEMITONE_MIN = -12;
+export const SEMITONE_MAX = 12;
 
-export const PitchSettings = memo(() => {
-    const { t } = useTranslation();
+// Shared with the quick pitch shift control in the playback bar settings popover
+// (player-config.tsx) so both places apply pitch the same way.
+export const useApplyPitch = () => {
     const settings = usePlaybackSettings();
-    const { setSettings } = useSettingsStoreActions();
 
-    // Ref pattern to avoid stale closure when reading webAudio DSP nodes,
-    // matching the approach used in EqSettings.
+    // Read from ref so we always get the current AudioContext state,
+    // not the stale value captured when this callback was created.
     const webAudioContext = useContext(WebAudioContext);
     const webAudioContextRef = useRef(webAudioContext);
     useEffect(() => {
         webAudioContextRef.current = webAudioContext;
     }, [webAudioContext]);
 
-    const applyPitch = useCallback(
+    return useCallback(
         (pitch: { enabled: boolean; semitones: number }) => {
             // - MPV player -
             if (settings.type === PlayerType.LOCAL) {
@@ -51,10 +51,20 @@ export const PitchSettings = memo(() => {
             const pitchShifter = webAudioContextRef.current.webAudio?.dsp?.pitchShifter;
             if (!pitchShifter) return;
 
+            // Mutations to Web Audio API AudioParam values are intentional
+            // side effects on the live audio graph, not React state mutations.
+            // eslint-disable-next-line react-hooks/immutability
             pitchShifter.pitchSemitones.value = pitch.enabled ? pitch.semitones : 0;
         },
         [settings.type],
     );
+};
+
+export const PitchSettings = memo(() => {
+    const { t } = useTranslation();
+    const settings = usePlaybackSettings();
+    const { setSettings } = useSettingsStoreActions();
+    const applyPitch = useApplyPitch();
 
     const handleToggle = (enabled: boolean) => {
         const newPitch = { ...settings.pitch, enabled };
@@ -62,7 +72,7 @@ export const PitchSettings = memo(() => {
         applyPitch(newPitch);
     };
 
-    const handleSemitonesChangeEnd = (semitones: number) => {
+    const handleSemitonesChange = (semitones: number) => {
         const newPitch = { ...settings.pitch, semitones };
         setSettings({ playback: { pitch: newPitch } });
         applyPitch(newPitch);
@@ -91,7 +101,7 @@ export const PitchSettings = memo(() => {
                               min={SEMITONE_MIN}
                               onChange={(value) => {
                                   if (typeof value === 'number') {
-                                      handleSemitonesChangeEnd(value);
+                                      handleSemitonesChange(value);
                                   }
                               }}
                               step={1}
@@ -113,7 +123,7 @@ export const PitchSettings = memo(() => {
                               ]}
                               max={SEMITONE_MAX}
                               min={SEMITONE_MIN}
-                              onChangeEnd={handleSemitonesChangeEnd}
+                              onChange={handleSemitonesChange}
                               step={1}
                               value={settings.pitch.semitones}
                               w={260}

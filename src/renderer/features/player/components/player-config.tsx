@@ -9,6 +9,11 @@ import {
     useAudioDevices,
 } from '/@/renderer/features/settings/components/playback/audio-settings';
 import {
+    SEMITONE_MAX,
+    SEMITONE_MIN,
+    useApplyPitch,
+} from '/@/renderer/features/settings/components/playback/pitch-settings';
+import {
     ListConfigBooleanControl,
     ListConfigTable,
 } from '/@/renderer/features/shared/components/list-config-menu';
@@ -55,6 +60,7 @@ export const PlayerConfig = () => {
 
     const playbackSettings = usePlaybackSettings();
     const { setSettings } = useSettingsStoreActions();
+    const applyPitch = useApplyPitch();
 
     const setPreservePitch = useCallback(
         (value: boolean) => {
@@ -63,6 +69,24 @@ export const PlayerConfig = () => {
             });
         },
         [playbackSettings, setSettings],
+    );
+
+    const setPitchShiftEnabled = useCallback(
+        (enabled: boolean) => {
+            const newPitch = { ...playbackSettings.pitch, enabled };
+            setSettings({ playback: { pitch: newPitch } });
+            applyPitch(newPitch);
+        },
+        [applyPitch, playbackSettings.pitch, setSettings],
+    );
+
+    const setPitchShiftSemitones = useCallback(
+        (semitones: number) => {
+            const newPitch = { ...playbackSettings.pitch, semitones };
+            setSettings({ playback: { pitch: newPitch } });
+            applyPitch(newPitch);
+        },
+        [applyPitch, playbackSettings.pitch, setSettings],
     );
 
     const audioOptions = useMemo(
@@ -124,8 +148,47 @@ export const PlayerConfig = () => {
                 id: 'preservePitch',
                 label: t('setting.preservePitch'),
             },
+            {
+                component: (
+                    <ListConfigBooleanControl
+                        onChange={setPitchShiftEnabled}
+                        value={playbackSettings.pitch.enabled}
+                    />
+                ),
+                id: 'pitchShift',
+                label: t('setting.pitchShift'),
+            },
+            {
+                component: (
+                    <Slider
+                        label={(v) => `${v > 0 ? '+' : ''}${v}`}
+                        marks={[
+                            { label: '-12', value: SEMITONE_MIN },
+                            { label: '0', value: 0 },
+                            { label: '+12', value: SEMITONE_MAX },
+                        ]}
+                        max={SEMITONE_MAX}
+                        min={SEMITONE_MIN}
+                        onChange={setPitchShiftSemitones}
+                        step={1}
+                        value={playbackSettings.pitch.semitones}
+                        w="100%"
+                    />
+                ),
+                id: 'pitchShiftSemitones',
+                isHidden: !playbackSettings.pitch.enabled,
+                label: t('setting.pitchShiftSemitones'),
+            },
         ],
-        [preservePitch, setPreservePitch, t],
+        [
+            preservePitch,
+            setPreservePitch,
+            playbackSettings.pitch.enabled,
+            playbackSettings.pitch.semitones,
+            setPitchShiftEnabled,
+            setPitchShiftSemitones,
+            t,
+        ],
     );
 
     const sidebarOptions = useMemo(
