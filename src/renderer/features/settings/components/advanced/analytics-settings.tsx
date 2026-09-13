@@ -12,7 +12,7 @@ export const AnalyticsSettings = memo(() => {
 
     const handleSetSendAnalytics = (send: boolean) => {
         if (send) {
-            localStorage.removeItem('umami.disabled');
+            localStorage.setItem('umami.disabled', '0');
         } else {
             localStorage.setItem('umami.disabled', '1');
         }
@@ -23,7 +23,7 @@ export const AnalyticsSettings = memo(() => {
             control: (
                 <Switch
                     aria-label={t('setting.analyticsEnable')}
-                    defaultChecked={localStorage.getItem('umami.disabled') !== '1'}
+                    defaultChecked={localStorage.getItem('umami.disabled') === '0'}
                     onChange={(e) => handleSetSendAnalytics(e.currentTarget.checked)}
                 />
             ),

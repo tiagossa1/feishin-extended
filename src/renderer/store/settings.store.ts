@@ -2249,7 +2249,7 @@ const initialState: SettingsState = {
         type: 'audiomotionanalyzer',
     },
     window: {
-        disableAutoUpdate: false,
+        disableAutoUpdate: true,
         exitToTray: false,
         minimizeToTray: false,
         preventSleepOnPlayback: false,
