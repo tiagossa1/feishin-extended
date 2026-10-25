@@ -129,5 +129,11 @@ export const ScrobbleSettings = memo(() => {
         },
     ];
 
-    return <SettingsSection options={scrobbleOptions} title={t('page.setting.scrobble')} />;
+    return (
+        <SettingsSection
+            id="general.scrobble"
+            options={scrobbleOptions}
+            title={t('page.setting.scrobble')}
+        />
+    );
 });

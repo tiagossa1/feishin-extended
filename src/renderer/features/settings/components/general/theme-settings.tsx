@@ -405,6 +405,7 @@ export const ThemeSettings = memo(() => {
                     <StylesSettings />
                 </>
             }
+            id="general.theme"
             options={themeOptions}
             title={t('page.setting.theme')}
         />

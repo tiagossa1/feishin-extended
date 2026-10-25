@@ -84,5 +84,11 @@ export const TranscodeSettings = memo(() => {
         },
     ];
 
-    return <SettingsSection options={transcodeOptions} title={t('page.setting.transcoding')} />;
+    return (
+        <SettingsSection
+            id="playback.transcoding"
+            options={transcodeOptions}
+            title={t('page.setting.transcoding')}
+        />
+    );
 });

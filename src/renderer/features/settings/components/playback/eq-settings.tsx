@@ -851,9 +851,17 @@ export const EqSettings = memo(() => {
     return (
         <>
             <Divider />
-            <SettingsSection options={eqOptions} />
+            <SettingsSection
+                id="playback.equalizer"
+                options={eqOptions}
+                title={t('setting.equalizer')}
+            />
             <Divider />
-            <SettingsSection options={compressorOptions} />
+            <SettingsSection
+                id="playback.compressor"
+                options={compressorOptions}
+                title={t('setting.compressor')}
+            />
         </>
     );
 });

@@ -775,6 +775,7 @@ export const ApplicationSettings = memo(() => {
                     <PathSettings />
                 </>
             }
+            id="general.application"
             options={options}
             title={t('page.setting.application')}
         />

@@ -52,5 +52,11 @@ export const ExportImportSettings = memo(() => {
         },
     ];
 
-    return <SettingsSection options={options} title={t('page.setting.exportImport')} />;
+    return (
+        <SettingsSection
+            id="advanced.exportImport"
+            options={options}
+            title={t('page.setting.exportImport')}
+        />
+    );
 });

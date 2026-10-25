@@ -136,7 +136,13 @@ export const PitchSettings = memo(() => {
             : []),
     ];
 
-    return <SettingsSection options={pitchOptions} />;
+    return (
+        <SettingsSection
+            id="playback.pitchShift"
+            options={pitchOptions}
+            title={t('setting.pitchShift')}
+        />
+    );
 });
 
 PitchSettings.displayName = 'PitchSettings';

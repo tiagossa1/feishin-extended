@@ -31,6 +31,7 @@ export interface AppSlice extends AppState {
         setLatestVersion: (version: null | string) => void;
         setPageSidebar: (key: string, value: boolean) => void;
         setPrivateMode: (enabled: boolean) => void;
+        setSettingsSectionExpanded: (sectionId: string, expanded: boolean) => void;
         setShowTimeRemaining: (enabled: boolean) => void;
         setSideBar: (options: Partial<SidebarProps>) => void;
         setTitleBar: (options: Partial<TitlebarProps>) => void;
@@ -61,6 +62,7 @@ export interface AppState {
     pageSidebar: Record<string, boolean>;
     platform: Platform;
     privateMode: boolean;
+    settingsSectionsExpanded: Record<string, boolean>;
     showTimeRemaining: boolean;
     sidebar: SidebarProps;
     titlebar: TitlebarProps;
@@ -178,6 +180,11 @@ export const useAppStore = createWithEqualityFn<AppSlice>()(
                             state.privateMode = privateMode;
                         });
                     },
+                    setSettingsSectionExpanded: (sectionId, expanded) => {
+                        set((state) => {
+                            state.settingsSectionsExpanded[sectionId] = expanded;
+                        });
+                    },
                     setShowTimeRemaining: (showTimeRemaining) => {
                         set((state) => {
                             state.showTimeRemaining = showTimeRemaining;
@@ -237,6 +244,7 @@ export const useAppStore = createWithEqualityFn<AppSlice>()(
                 },
                 platform: Platform.WINDOWS,
                 privateMode: false,
+                settingsSectionsExpanded: {},
                 showTimeRemaining: false,
                 sidebar: {
                     collapsed: false,

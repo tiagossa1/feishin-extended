@@ -61,5 +61,11 @@ export const MediaSessionSettings = memo(() => {
         },
     ];
 
-    return <SettingsSection options={mediaSessionOptions} />;
+    return (
+        <SettingsSection
+            id="hotkeys.mediaSession"
+            options={mediaSessionOptions}
+            title={t('setting.mediaSession')}
+        />
+    );
 });

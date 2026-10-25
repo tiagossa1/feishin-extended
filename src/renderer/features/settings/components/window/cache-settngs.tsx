@@ -100,7 +100,11 @@ export const CacheSettings = memo(() => {
 
     return (
         <>
-            <SettingsSection options={options} title={t('page.setting.cache')} />
+            <SettingsSection
+                id="advanced.cache"
+                options={options}
+                title={t('page.setting.cache')}
+            />
             {isElectron() && (
                 <Button onClick={handleOpenApplicationDirectory} variant="default">
                     {t('action.openApplicationDirectory')}

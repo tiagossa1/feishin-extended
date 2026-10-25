@@ -544,5 +544,11 @@ export const ControlSettings = memo(() => {
         },
     ];
 
-    return <SettingsSection options={controlOptions} title={t('page.setting.controls')} />;
+    return (
+        <SettingsSection
+            id="general.controls"
+            options={controlOptions}
+            title={t('page.setting.controls')}
+        />
+    );
 });

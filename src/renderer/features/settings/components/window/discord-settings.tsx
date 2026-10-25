@@ -258,5 +258,11 @@ export const DiscordSettings = memo(() => {
         },
     ];
 
-    return <SettingsSection options={discordOptions} title={t('page.setting.discord')} />;
+    return (
+        <SettingsSection
+            id="window.discord"
+            options={discordOptions}
+            title={t('page.setting.discord')}
+        />
+    );
 });

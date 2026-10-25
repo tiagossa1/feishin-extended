@@ -234,5 +234,11 @@ export const AudioSettings = memo(() => {
         },
     ];
 
-    return <SettingsSection options={audioOptions} title={t('page.setting.audio')} />;
+    return (
+        <SettingsSection
+            id="playback.audio"
+            options={audioOptions}
+            title={t('page.setting.audio')}
+        />
+    );
 });

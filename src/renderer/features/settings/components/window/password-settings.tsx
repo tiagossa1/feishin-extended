@@ -52,5 +52,11 @@ export const PasswordSettings = memo(() => {
         },
     ];
 
-    return <SettingsSection options={updateOptions} />;
+    return (
+        <SettingsSection
+            id="window.passwordStore"
+            options={updateOptions}
+            title={t('setting.passwordStore')}
+        />
+    );
 });

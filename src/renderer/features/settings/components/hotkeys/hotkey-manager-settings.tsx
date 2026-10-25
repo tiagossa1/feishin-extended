@@ -344,7 +344,9 @@ export const HotkeyManagerSettings = memo(() => {
                     </div>
                 </>
             }
+            id="hotkeys.applicationHotkeys"
             options={options}
+            title={t('setting.applicationHotkeys')}
         />
     );
 });

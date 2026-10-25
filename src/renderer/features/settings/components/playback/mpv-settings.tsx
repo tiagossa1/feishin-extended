@@ -334,9 +334,17 @@ export const MpvSettings = memo(() => {
 
     return (
         <>
-            <SettingsSection options={options} />
-            <SettingsSection options={generalOptions} />
-            <SettingsSection options={replayGainOptions} />
+            <SettingsSection id="playback.mpv" options={options} title={t('page.setting.mpv')} />
+            <SettingsSection
+                id="playback.mpvAudio"
+                options={generalOptions}
+                title={t('page.setting.mpvAudio')}
+            />
+            <SettingsSection
+                id="playback.replayGain"
+                options={replayGainOptions}
+                title={t('page.setting.replayGain')}
+            />
         </>
     );
 });

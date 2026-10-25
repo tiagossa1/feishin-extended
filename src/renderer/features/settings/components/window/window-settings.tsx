@@ -250,5 +250,11 @@ export const WindowSettings = memo(() => {
         },
     ];
 
-    return <SettingsSection options={windowOptions} title={t('page.setting.application')} />;
+    return (
+        <SettingsSection
+            id="window.application"
+            options={windowOptions}
+            title={t('page.setting.application')}
+        />
+    );
 });

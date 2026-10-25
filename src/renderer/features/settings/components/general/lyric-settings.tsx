@@ -221,5 +221,11 @@ export const LyricSettings = memo(() => {
         },
     ];
 
-    return <SettingsSection options={lyricOptions} title={t('page.setting.lyrics')} />;
+    return (
+        <SettingsSection
+            id="general.lyrics"
+            options={lyricOptions}
+            title={t('page.setting.lyrics')}
+        />
+    );
 });

@@ -163,5 +163,11 @@ export const LoggerSettings = memo(() => {
         },
     ];
 
-    return <SettingsSection options={loggerOptions} title={t('page.setting.logger')} />;
+    return (
+        <SettingsSection
+            id="advanced.logger"
+            options={loggerOptions}
+            title={t('page.setting.logger')}
+        />
+    );
 });

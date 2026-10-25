@@ -134,5 +134,11 @@ export const QueryBuilderSettings = memo(() => {
         },
     ];
 
-    return <SettingsSection options={customFieldsOptions} title={t('page.setting.queryBuilder')} />;
+    return (
+        <SettingsSection
+            id="general.queryBuilder"
+            options={customFieldsOptions}
+            title={t('page.setting.queryBuilder')}
+        />
+    );
 });

@@ -182,5 +182,7 @@ export const AutoDJSettings = memo(() => {
         },
     ];
 
-    return <SettingsSection options={autoDJOptions} title={t('setting.autoDJ')} />;
+    return (
+        <SettingsSection id="playback.autoDJ" options={autoDJOptions} title={t('setting.autoDJ')} />
+    );
 });

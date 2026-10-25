@@ -60,5 +60,11 @@ export const WindowHotkeySettings = memo(() => {
         },
     ];
 
-    return <SettingsSection options={options} />;
+    return (
+        <SettingsSection
+            id="hotkeys.globalMediaHotkeys"
+            options={options}
+            title={t('setting.globalMediaHotkeys')}
+        />
+    );
 });

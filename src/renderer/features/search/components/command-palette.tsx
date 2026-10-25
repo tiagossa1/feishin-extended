@@ -8,6 +8,7 @@ import { SearchAlbumsSection } from '/@/renderer/features/search/components/sear
 import { SearchSongsSection } from '/@/renderer/features/search/components/search-songs-section';
 import { ServerCommands } from '/@/renderer/features/search/components/server-commands';
 import { useAppStore } from '/@/renderer/store';
+import { useGeneralSettings } from '/@/renderer/store/settings.store';
 import { ActionIcon } from '/@/shared/components/action-icon/action-icon';
 import { Breadcrumb } from '/@/shared/components/breadcrumb/breadcrumb';
 import { Button } from '/@/shared/components/button/button';
@@ -53,6 +54,7 @@ function CommandPaletteSearch({
     const searchSectionsExpanded = useAppStore(
         (state) => state.commandPaletteSearchSectionsExpanded,
     );
+    const globalSearch = useGeneralSettings().globalSearch;
     const setSearchSectionExpanded = useAppStore(
         (state) => state.actions.setCommandPaletteSearchSectionExpanded,
     );
@@ -83,45 +85,51 @@ function CommandPaletteSearch({
             <Divider my="sm" />
             <Command.List>
                 <Stack gap="xs">
-                    <SearchAlbumsSection
-                        debouncedQuery={deferredSearchQuery}
-                        expanded={searchSectionsExpanded[SEARCH_SECTION_IDS.albums] ?? true}
-                        isHome={isHome}
-                        onSelectResult={onSelectResult}
-                        onToggle={() =>
-                            setSearchSectionExpanded(
-                                SEARCH_SECTION_IDS.albums,
-                                !(searchSectionsExpanded[SEARCH_SECTION_IDS.albums] ?? true),
-                            )
-                        }
-                        query={query}
-                    />
-                    <SearchAlbumArtistsSection
-                        debouncedQuery={deferredSearchQuery}
-                        expanded={searchSectionsExpanded[SEARCH_SECTION_IDS.artists] ?? true}
-                        isHome={isHome}
-                        onSelectResult={onSelectResult}
-                        onToggle={() =>
-                            setSearchSectionExpanded(
-                                SEARCH_SECTION_IDS.artists,
-                                !(searchSectionsExpanded[SEARCH_SECTION_IDS.artists] ?? true),
-                            )
-                        }
-                        query={query}
-                    />
-                    <SearchSongsSection
-                        debouncedQuery={deferredSearchQuery}
-                        expanded={searchSectionsExpanded[SEARCH_SECTION_IDS.tracks] ?? true}
-                        isHome={isHome}
-                        onSelectResult={onSelectResult}
-                        onToggle={() =>
-                            setSearchSectionExpanded(
-                                SEARCH_SECTION_IDS.tracks,
-                                !(searchSectionsExpanded[SEARCH_SECTION_IDS.tracks] ?? true),
-                            )
-                        }
-                        query={query}
-                    />
+                    {globalSearch.albums && (
+                        <SearchAlbumsSection
+                            debouncedQuery={deferredSearchQuery}
+                            expanded={searchSectionsExpanded[SEARCH_SECTION_IDS.albums] ?? true}
+                            isHome={isHome}
+                            onSelectResult={onSelectResult}
+                            onToggle={() =>
+                                setSearchSectionExpanded(
+                                    SEARCH_SECTION_IDS.albums,
+                                    !(searchSectionsExpanded[SEARCH_SECTION_IDS.albums] ?? true),
+                                )
+                            }
+                            query={query}
+                        />
+                    )}
+                    {globalSearch.artists && (
+                        <SearchAlbumArtistsSection
+                            debouncedQuery={deferredSearchQuery}
+                            expanded={searchSectionsExpanded[SEARCH_SECTION_IDS.artists] ?? true}
+                            isHome={isHome}
+                            onSelectResult={onSelectResult}
+                            onToggle={() =>
+                                setSearchSectionExpanded(
+                                    SEARCH_SECTION_IDS.artists,
+                                    !(searchSectionsExpanded[SEARCH_SECTION_IDS.artists] ?? true),
+                                )
+                            }
+                            query={query}
+                        />
+                    )}
+                    {globalSearch.tracks && (
+                        <SearchSongsSection
+                            debouncedQuery={deferredSearchQuery}
+                            expanded={searchSectionsExpanded[SEARCH_SECTION_IDS.tracks] ?? true}
+                            isHome={isHome}
+                            onSelectResult={onSelectResult}
+                            onToggle={() =>
+                                setSearchSectionExpanded(
+                                    SEARCH_SECTION_IDS.tracks,
+                                    !(searchSectionsExpanded[SEARCH_SECTION_IDS.tracks] ?? true),
+                                )
+                            }
+                            query={query}
+                        />
+                    )}
                 </Stack>
                 {children}
             </Command.List>
@@ -135,6 +143,7 @@ export const CommandPalette = ({ modalProps }: CommandPaletteProps) => {
     const [pages, setPages] = useState<CommandPalettePages[]>([CommandPalettePages.HOME]);
     const activePage = pages[pages.length - 1];
     const isHome = activePage === CommandPalettePages.HOME;
+    const showCommands = useGeneralSettings().globalSearch.commands;
     const commandRootRef = useRef<HTMLDivElement>(null);
     const searchInputRef = useRef<HTMLInputElement>(null);
 
@@ -227,7 +236,7 @@ export const CommandPalette = ({ modalProps }: CommandPaletteProps) => {
                     searchInputRef={searchInputRef}
                     setQuery={setQuery}
                 >
-                    {activePage === CommandPalettePages.HOME && (
+                    {showCommands && activePage === CommandPalettePages.HOME && (
                         <HomeCommands
                             handleClose={modalProps.handlers.close}
                             pages={pages}
@@ -236,14 +245,14 @@ export const CommandPalette = ({ modalProps }: CommandPaletteProps) => {
                             setQuery={setQuery}
                         />
                     )}
-                    {activePage === CommandPalettePages.GO_TO && (
+                    {showCommands && activePage === CommandPalettePages.GO_TO && (
                         <GoToCommands
                             handleClose={modalProps.handlers.close}
                             setPages={setPages}
                             setQuery={setQuery}
                         />
                     )}
-                    {activePage === CommandPalettePages.MANAGE_SERVERS && (
+                    {showCommands && activePage === CommandPalettePages.MANAGE_SERVERS && (
                         <ServerCommands
                             handleClose={modalProps.handlers.close}
                             setPages={setPages}

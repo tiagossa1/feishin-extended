@@ -32,5 +32,11 @@ export const AnalyticsSettings = memo(() => {
         },
     ];
 
-    return <SettingsSection options={analyticsOptions} title={t('page.setting.analytics')} />;
+    return (
+        <SettingsSection
+            id="advanced.analytics"
+            options={analyticsOptions}
+            title={t('page.setting.analytics')}
+        />
+    );
 });

@@ -430,5 +430,11 @@ export const PlayerFilterSettings = memo(() => {
         },
     ];
 
-    return <SettingsSection options={filterOptions} title={t('page.setting.playerFilters')} />;
+    return (
+        <SettingsSection
+            id="playback.playerFilters"
+            options={filterOptions}
+            title={t('page.setting.playerFilters')}
+        />
+    );
 });

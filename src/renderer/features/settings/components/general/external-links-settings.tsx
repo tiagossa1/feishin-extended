@@ -155,5 +155,11 @@ export const ExternalLinksSettings = memo(() => {
         },
     ];
 
-    return <SettingsSection options={options} title={t('common.externalLinks')} />;
+    return (
+        <SettingsSection
+            id="general.externalLinks"
+            options={options}
+            title={t('common.externalLinks')}
+        />
+    );
 });

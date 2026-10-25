@@ -90,5 +90,11 @@ export const UpdateSettings = memo(() => {
         },
     ];
 
-    return <SettingsSection options={updateOptions} title={t('page.setting.updates')} />;
+    return (
+        <SettingsSection
+            id="window.updates"
+            options={updateOptions}
+            title={t('page.setting.updates')}
+        />
+    );
 });

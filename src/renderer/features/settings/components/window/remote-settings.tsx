@@ -146,5 +146,11 @@ export const RemoteSettings = memo(() => {
         },
     ];
 
-    return <SettingsSection options={controlOptions} title={t('page.setting.remote')} />;
+    return (
+        <SettingsSection
+            id="window.remote"
+            options={controlOptions}
+            title={t('page.setting.remote')}
+        />
+    );
 });
