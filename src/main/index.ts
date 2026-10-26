@@ -44,18 +44,6 @@ import {
 } from '/@/main/utils/window-bounds';
 import { PlayerRepeat, PlayerStatus, PlayerType, TitleTheme } from '/@/shared/types/types';
 
-const ALPHA_UPDATER_CONFIG: {
-    bucket: string;
-    channel: string;
-    endpoint: string;
-    provider: 's3';
-} = {
-    bucket: '',
-    channel: 'alpha',
-    endpoint: 'https://feishin-nightly-bucket.jeffvli.org',
-    provider: 's3',
-};
-
 const GITHUB_UPDATER_CONFIG = {
     owner: 'tiagossa1',
     provider: 'github' as const,
@@ -171,7 +159,7 @@ async function checkAllChannelsAndGetBest(): Promise<{
         updater: UpdaterInstance;
     }> = [];
 
-    const alphaUpdater = createAlphaUpdaterInstance({ probeOnly: true });
+    const alphaUpdater = createGithubUpdaterInstance('alpha', { probeOnly: true });
 
     try {
         log.info('Checking for updates on alpha channel');
@@ -241,7 +229,7 @@ function configureAndGetUpdater(): UpdaterInstance {
     const effectiveChannel = store.get('release_channel') as string;
 
     if (effectiveChannel === 'alpha') {
-        return createAlphaUpdaterInstance();
+        return createGithubUpdaterInstance('alpha');
     }
 
     autoUpdater.logger = autoUpdaterLogInterface;
@@ -282,34 +270,8 @@ function configureAutoUpdaterForChannel(channel: 'beta' | 'latest'): void {
     }
 }
 
-function createAlphaUpdaterInstance(
-    options: { probeOnly?: boolean } = {},
-): AppImageUpdater | MacUpdater | NsisUpdater {
-    const probeOnly = options.probeOnly ?? false;
-    let updater: AppImageUpdater | MacUpdater | NsisUpdater;
-
-    if (isMacOS()) {
-        updater = new MacUpdater(ALPHA_UPDATER_CONFIG);
-    } else if (isLinux()) {
-        updater = new AppImageUpdater(ALPHA_UPDATER_CONFIG);
-    } else {
-        updater = new NsisUpdater(ALPHA_UPDATER_CONFIG);
-    }
-
-    updater.logger = autoUpdaterLogInterface;
-    updater.channel = ALPHA_UPDATER_CONFIG.channel;
-    updater.allowPrerelease = true;
-    updater.disableDifferentialDownload = true;
-    updater.allowDowngrade = true;
-    updater.autoDownload = !probeOnly;
-    updater.autoInstallOnAppQuit = true;
-    updater.autoRunAppAfterInstall = true;
-
-    return updater;
-}
-
 function createGithubUpdaterInstance(
-    channel: 'beta' | 'latest',
+    channel: 'alpha' | 'beta' | 'latest',
     options: { probeOnly?: boolean } = {},
 ): AppImageUpdater | MacUpdater | NsisUpdater {
     const probeOnly = options.probeOnly ?? false;
@@ -329,7 +291,7 @@ function createGithubUpdaterInstance(
     updater.autoRunAppAfterInstall = true;
     updater.channel = channel;
 
-    if (channel === 'beta') {
+    if (channel === 'alpha' || channel === 'beta') {
         updater.allowDowngrade = true;
         updater.allowPrerelease = true;
         updater.disableDifferentialDownload = true;
