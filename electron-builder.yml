@@ -70,6 +70,6 @@ afterAllArtifactBuild: scripts/after-all-artifact-build.mjs
 publish:
     provider: github
     owner: tiagossa1
-    repo: feishin
+    repo: feishin-extended
     channel: latest
     releaseType: draft

@@ -5,6 +5,8 @@ import packageJson from '../../package.json';
 import { store } from '/@/main/features/core/settings';
 import { PlayerRepeat, PlayerStatus } from '/@/shared/types/types';
 
+const GITHUB_REPOSITORY_URL = packageJson.repository.url.replace(/\.git$/, '');
+
 export type MenuPlaybackState = {
     accelerators?: {
         globalSearch?: string;
@@ -322,27 +324,27 @@ export default class MenuBuilder {
             submenu: [
                 {
                     click() {
-                        shell.openExternal('https://github.com/tiagossa1/feishin');
+                        shell.openExternal(GITHUB_REPOSITORY_URL);
                     },
                     label: 'Learn More',
                 },
                 {
                     click() {
                         shell.openExternal(
-                            'https://github.com/tiagossa1/feishin?tab=readme-ov-file#getting-started',
+                            `${GITHUB_REPOSITORY_URL}?tab=readme-ov-file#getting-started`,
                         );
                     },
                     label: 'Documentation',
                 },
                 {
                     click() {
-                        shell.openExternal('https://github.com/tiagossa1/feishin/discussions');
+                        shell.openExternal(`${GITHUB_REPOSITORY_URL}/discussions`);
                     },
                     label: 'Community Discussions',
                 },
                 {
                     click() {
-                        shell.openExternal('https://github.com/tiagossa1/feishin/issues');
+                        shell.openExternal(`${GITHUB_REPOSITORY_URL}/issues`);
                     },
                     label: 'Search Issues',
                 },
@@ -439,27 +441,27 @@ export default class MenuBuilder {
                 submenu: [
                     {
                         click() {
-                            shell.openExternal('https://github.com/tiagossa1/feishin');
+                            shell.openExternal(GITHUB_REPOSITORY_URL);
                         },
                         label: 'Learn More',
                     },
                     {
                         click() {
                             shell.openExternal(
-                                'https://github.com/tiagossa1/feishin?tab=readme-ov-file#getting-started',
+                                `${GITHUB_REPOSITORY_URL}?tab=readme-ov-file#getting-started`,
                             );
                         },
                         label: 'Documentation',
                     },
                     {
                         click() {
-                            shell.openExternal('https://github.com/tiagossa1/feishin/discussions');
+                            shell.openExternal(`${GITHUB_REPOSITORY_URL}/discussions`);
                         },
                         label: 'Community Discussions',
                     },
                     {
                         click() {
-                            shell.openExternal('https://github.com/tiagossa1/feishin/issues');
+                            shell.openExternal(`${GITHUB_REPOSITORY_URL}/issues`);
                         },
                         label: 'Search Issues',
                     },

@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 
-const GITHUB_REPOSITORY = 'tiagossa1/feishin';
+const GITHUB_REPOSITORY = 'tiagossa1/feishin-extended';
 
 export const GITHUB_REPOSITORY_URL = `https://github.com/${GITHUB_REPOSITORY}`;
 export const GITHUB_COMPARE_URL = `https://api.github.com/repos/${GITHUB_REPOSITORY}/compare`;

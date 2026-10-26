@@ -69,6 +69,6 @@ npmRebuild: false
 publish:
     provider: github
     owner: tiagossa1
-    repo: feishin
+    repo: feishin-extended
     channel: beta
     releaseType: draft

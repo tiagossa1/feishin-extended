@@ -1,4 +1,4 @@
 provider: github
 owner: tiagossa1
-repo: feishin
+repo: feishin-extended
 updaterCacheDirName: feishin-updater

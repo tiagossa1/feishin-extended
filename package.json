@@ -1,6 +1,6 @@
 {
     "name": "feishin",
-    "version": "1.15.1-extended.3",
+    "version": "1.15.1-extended.4",
     "description": "A modern self-hosted music player.",
     "keywords": [
         "subsonic",
@@ -9,13 +9,13 @@
         "react",
         "electron"
     ],
-    "homepage": "https://github.com/tiagossa1/feishin",
+    "homepage": "https://github.com/tiagossa1/feishin-extended",
     "bugs": {
-        "url": "https://github.com/tiagossa1/feishin/issues"
+        "url": "https://github.com/tiagossa1/feishin-extended/issues"
     },
     "repository": {
         "type": "git",
-        "url": "https://github.com/tiagossa1/feishin.git"
+        "url": "https://github.com/tiagossa1/feishin-extended.git"
     },
     "license": "GPL-3.0",
     "author": {

@@ -47,7 +47,7 @@ import { PlayerRepeat, PlayerStatus, PlayerType, TitleTheme } from '/@/shared/ty
 const GITHUB_UPDATER_CONFIG = {
     owner: 'tiagossa1',
     provider: 'github' as const,
-    repo: 'feishin',
+    repo: 'feishin-extended',
 };
 
 type UpdaterInstance = AppImageUpdater | MacUpdater | NsisUpdater | typeof autoUpdater;
