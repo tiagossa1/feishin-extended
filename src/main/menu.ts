@@ -80,9 +80,11 @@ export default class MenuBuilder {
     applicationMenu: Menu | null = null;
     developmentEnvironmentSetup = false;
     mainWindow: BrowserWindow;
+    showMainWindow: () => void;
 
-    constructor(mainWindow: BrowserWindow) {
+    constructor(mainWindow: BrowserWindow, showMainWindow: () => void) {
         this.mainWindow = mainWindow;
+        this.showMainWindow = showMainWindow;
     }
 
     buildDarwinTemplate({
@@ -186,18 +188,16 @@ export default class MenuBuilder {
                           },
                           {
                               accelerator: 'CmdOrCtrl+0',
-                              click: () => {
-                                  if (this.mainWindow.isMinimized()) {
-                                      this.mainWindow.restore();
-                                  }
-                                  this.mainWindow.setSkipTaskbar(false);
-                                  this.mainWindow.show();
-                                  this.mainWindow.focus();
-                              },
+                              click: this.showMainWindow,
                               label: 'Feishin Extended',
                           },
                       ]
-                    : undefined,
+                    : [
+                          {
+                              click: this.showMainWindow,
+                              label: 'Show Feishin',
+                          },
+                      ],
         };
         const subMenuPlayback: MenuItemConstructorOptions = {
             label: 'Playback',

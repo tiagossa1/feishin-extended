@@ -5,11 +5,7 @@ import { useCallback } from 'react';
 import { api } from '/@/renderer/api';
 import { queryKeys } from '/@/renderer/api/query-keys';
 import { usePlayerEvents } from '/@/renderer/features/player/audio-player/hooks/use-player-events';
-import {
-    uniqueSeekToTimestamp,
-    updateQueueSong,
-    usePlayerStoreBase,
-} from '/@/renderer/store/player.store';
+import { updateQueueSong } from '/@/renderer/store/player.store';
 import { logger } from '/@/renderer/utils/logger';
 import { QueueSong, SongDetailQuery } from '/@/shared/types/domain-types';
 
@@ -63,12 +59,6 @@ export const useUpdateCurrentSong = () => {
         [queryClient],
     );
 
-    const resetSeekToTimestamp = useCallback(() => {
-        usePlayerStoreBase.setState((state) => {
-            state.player.seekToTimestamp = uniqueSeekToTimestamp(0);
-        });
-    }, []);
-
     usePlayerEvents(
         {
             onCurrentSongChange: (properties, prev) => {
@@ -78,12 +68,10 @@ export const useUpdateCurrentSong = () => {
                     properties.song?._uniqueId !== prev.song?._uniqueId
                 ) {
                     handleSongChange(properties);
-                    // Prevents issues with lingering seekToTimestamp on song autonext
-                    resetSeekToTimestamp();
                 }
             },
         },
-        [handleSongChange, resetSeekToTimestamp],
+        [handleSongChange],
     );
 };
 

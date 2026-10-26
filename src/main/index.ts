@@ -334,9 +334,7 @@ let currentSidebarCollapsed = false;
 let currentShuffleEnabled = false;
 
 app.on('before-quit', () => {
-    if (isMacOS()) {
-        forceQuit = true;
-    }
+    forceQuit = true;
     log.info('App quitting', { reason: exitFromTray ? 'tray' : 'before-quit' });
 });
 let playbackMenuAccelerators: MenuPlaybackState['accelerators'] = {};
@@ -415,7 +413,10 @@ const hideMainWindowToTray = () => {
 };
 
 export const showMainWindow = () => {
-    if (!mainWindow || mainWindow.isDestroyed()) return;
+    if (!mainWindow || mainWindow.isDestroyed()) {
+        void createWindow(false);
+        return;
+    }
 
     if (mainWindow.isMinimized()) {
         mainWindow.restore();
@@ -753,21 +754,6 @@ async function createWindow(first = true): Promise<void> {
         log.error('Renderer process unresponsive');
     });
 
-    // Mouse navigation
-    mainWindow.on('app-command', (_event, command) => {
-        if (
-            command === 'browser-backward' &&
-            mainWindow?.webContents.navigationHistory.canGoBack()
-        ) {
-            mainWindow.webContents.navigationHistory.goBack();
-        } else if (
-            command === 'browser-forward' &&
-            mainWindow?.webContents.navigationHistory.canGoForward()
-        ) {
-            mainWindow.webContents.navigationHistory.goForward();
-        }
-    });
-
     mainWindow.on('swipe', (_event, direction) => {
         if (direction === 'right' && mainWindow?.webContents.navigationHistory.canGoForward()) {
             mainWindow.webContents.navigationHistory.goForward();
@@ -782,16 +768,6 @@ async function createWindow(first = true): Promise<void> {
         ipcMain.removeHandler('app-check-for-updates');
         mainWindow = null;
     });
-
-    if (isMacOS()) {
-        mainWindow.on('show', () => {
-            rebuildMainMenu();
-        });
-
-        mainWindow.on('hide', () => {
-            rebuildMainMenu();
-        });
-    }
 
     mainWindow.on('close', (event) => {
         if (mainWindow) {
@@ -829,7 +805,7 @@ async function createWindow(first = true): Promise<void> {
         app.setAppUserModelId('com.tiagossa1.feishin-extended');
     }
 
-    menuBuilder = new MenuBuilder(mainWindow);
+    menuBuilder = new MenuBuilder(mainWindow, showMainWindow);
     rebuildMainMenu();
 
     // Open URLs in the user's browser
@@ -1167,6 +1143,22 @@ if (!singleInstance) {
                     statusText: 'Forbidden',
                 });
             });
+
+            // Chromium 43 enforces Local Network Access: a request from the file:// renderer
+            // to a private address needs this permission, which is denied without a handler,
+            // so a server on a LAN address cannot be reached at all (jeffvli/feishin#2430).
+            const ALLOWED_PERMISSIONS = new Set([
+                'local-fonts',
+                'local-network',
+                'local-network-access',
+                'loopback-network',
+            ]);
+            session.defaultSession.setPermissionCheckHandler((_wc, permission) =>
+                ALLOWED_PERMISSIONS.has(permission),
+            );
+            session.defaultSession.setPermissionRequestHandler((_wc, permission, callback) =>
+                callback(ALLOWED_PERMISSIONS.has(permission)),
+            );
 
             session.defaultSession.webRequest.onHeadersReceived((details, callback) => {
                 callback({
