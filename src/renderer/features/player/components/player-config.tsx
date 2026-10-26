@@ -314,6 +314,8 @@ const AudioPlayerTypeConfig = () => {
 
     const showRefreshButton = playbackSettings.type === PlayerType.LOCAL;
 
+    const isCasting = playbackSettings.type === PlayerType.DLNA;
+
     return (
         <Group gap="xs" wrap="nowrap">
             <Select
@@ -326,9 +328,12 @@ const AudioPlayerTypeConfig = () => {
                     },
                     { label: 'Web', value: PlayerType.WEB },
                     { label: 'Jukebox', value: PlayerType.JUKEBOX },
+                    ...(isCasting
+                        ? [{ disabled: true, label: 'DLNA', value: PlayerType.DLNA }]
+                        : []),
                 ]}
                 defaultValue={playbackSettings.type}
-                disabled={status === PlayerStatus.PLAYING}
+                disabled={status === PlayerStatus.PLAYING || isCasting}
                 onChange={(e) => {
                     setSettings({
                         playback: { ...playbackSettings, type: e as PlayerType },
@@ -476,8 +481,10 @@ const CrossfadeDurationConfig = () => {
                 { label: '9', value: 9 },
                 { label: '12', value: 12 },
                 { label: '15', value: 15 },
+                { label: '18', value: 18 },
+                { label: '21', value: 21 },
             ]}
-            max={15}
+            max={21}
             min={3}
             onChangeEnd={setCrossfadeDuration}
             styles={{
