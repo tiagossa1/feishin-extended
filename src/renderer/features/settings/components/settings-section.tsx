@@ -1,5 +1,7 @@
 import { ReactNode } from 'react';
 
+import styles from './settings-section.module.css';
+
 import { SettingsOptions } from '/@/renderer/features/settings/components/settings-option';
 import { useSettingSearchContext } from '/@/renderer/features/settings/context/search-context';
 import { useAppStore, useAppStoreActions } from '/@/renderer/store/app.store';
@@ -37,6 +39,7 @@ export const SettingsSection = ({ extra, id, options, title }: SettingsSectionPr
 
     return (
         <Accordion
+            classNames={{ item: styles.item }}
             onChange={(value) => {
                 if (!isSearchMatch) setSettingsSectionExpanded(id, value === id);
             }}
