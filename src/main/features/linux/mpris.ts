@@ -7,6 +7,7 @@ import { QueueSong } from '/@/shared/types/domain-types';
 import { PlayerRepeat, PlayerStatus } from '/@/shared/types/types';
 
 const mprisPlayer = Player({
+    desktopEntry: 'com.tiagossa1.feishin-extended',
     identity: 'Feishin Extended',
     maximumRate: 1.0,
     minimumRate: 1.0,
