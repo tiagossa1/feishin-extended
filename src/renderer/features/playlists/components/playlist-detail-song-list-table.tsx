@@ -13,7 +13,9 @@ import { useListContext } from '/@/renderer/context/list-context';
 import { usePlayer } from '/@/renderer/features/player/context/player-context';
 import { usePlaylistSongListFilters } from '/@/renderer/features/playlists/hooks/use-playlist-song-list-filters';
 import { useSearchTermFilter } from '/@/renderer/features/shared/hooks/use-search-term-filter';
+import { useTableSort } from '/@/renderer/features/shared/hooks/use-table-sort';
 import { searchLibraryItems } from '/@/renderer/features/shared/utils';
+import { useIsMobile } from '/@/renderer/hooks/use-is-mobile';
 import { usePlayerSong } from '/@/renderer/store';
 import { sortSongList } from '/@/shared/api/utils';
 import {
@@ -21,6 +23,7 @@ import {
     PlaylistSongListQuery,
     PlaylistSongListResponse,
     Song,
+    SongListSort,
 } from '/@/shared/types/domain-types';
 import { ItemListKey, TableColumn } from '/@/shared/types/types';
 
@@ -69,7 +72,12 @@ export const PlaylistDetailSongListTable = forwardRef<any, PlaylistDetailSongLis
         });
 
         const { searchTerm } = useSearchTermFilter();
+        const isMobile = useIsMobile();
         const { query } = usePlaylistSongListFilters();
+        const sort = useTableSort({
+            defaultSortBy: SongListSort.ID,
+            listKey: ItemListKey.PLAYLIST_SONG,
+        });
 
         const albumGroupingEnabled = columns.some(
             (col) => col.id === TableColumn.ALBUM_GROUP && col.isEnabled,
@@ -79,7 +87,6 @@ export const PlaylistDetailSongListTable = forwardRef<any, PlaylistDetailSongLis
             let list = data?.items || [];
             if (searchTerm) {
                 list = searchLibraryItems(list, searchTerm, LibraryItem.SONG);
-                return list;
             }
             return sortSongList(list, query.sortBy, query.sortOrder);
         }, [data?.items, searchTerm, query.sortBy, query.sortOrder]);
@@ -146,7 +153,7 @@ export const PlaylistDetailSongListTable = forwardRef<any, PlaylistDetailSongLis
         const table = (
             <ItemTableList
                 activeRowId={currentSong?.id}
-                autoFitColumns={autoFitColumns}
+                autoFitColumns={autoFitColumns && !isMobile}
                 CellComponent={ItemTableListColumn}
                 columns={effectiveColumns}
                 data={dataToRender}
@@ -169,6 +176,7 @@ export const PlaylistDetailSongListTable = forwardRef<any, PlaylistDetailSongLis
                 overrideControls={overrideControls}
                 ref={ref}
                 size={size}
+                sort={sort}
             />
         );
 
@@ -207,6 +215,7 @@ export const PlaylistDetailSongListEditTable = forwardRef<any, PlaylistDetailSon
         },
         ref,
     ) => {
+        const isMobile = useIsMobile();
         const { handleOnScrollEnd, scrollOffset } = useItemListScrollPersist({
             enabled: saveScrollOffset,
         });
@@ -254,7 +263,7 @@ export const PlaylistDetailSongListEditTable = forwardRef<any, PlaylistDetailSon
         return (
             <ItemTableList
                 activeRowId={currentSong?.id}
-                autoFitColumns={autoFitColumns}
+                autoFitColumns={autoFitColumns && !isMobile}
                 CellComponent={ItemTableListColumn}
                 columns={columns}
                 data={data.items}

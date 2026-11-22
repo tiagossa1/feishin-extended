@@ -191,6 +191,15 @@ export const PlaylistDetailSongListHeaderFilters = ({
                     disabled={isEditMode}
                     itemType={LibraryItem.PLAYLIST_SONG}
                     listKey={ItemListKey.PLAYLIST_SONG}
+                    target={
+                        <ActionIcon
+                            aria-label={t('common.sort')}
+                            disabled={isEditMode}
+                            icon="sort"
+                            tooltip={{ label: t('common.sort') }}
+                            variant="subtle"
+                        />
+                    }
                 />
                 <Divider orientation="vertical" />
                 <ListSortOrderToggleButton
@@ -211,13 +220,13 @@ export const PlaylistDetailSongListHeaderFilters = ({
                         <SaveAndReplaceButton mode={mode} songIds={tracks} />
                     ))}
                 {isViewEditMode && (
-                    <Button
+                    <ActionIcon
+                        aria-label={mode === 'edit' ? t('common.cancel') : t('common.edit')}
+                        icon={mode === 'edit' ? 'x' : 'edit'}
                         onClick={() => setMode?.(mode === 'edit' ? 'view' : 'edit')}
-                        uppercase
+                        tooltip={{ label: mode === 'edit' ? t('common.cancel') : t('common.edit') }}
                         variant={mode === 'edit' ? 'state-error' : 'subtle'}
-                    >
-                        {mode === 'edit' ? t('common.cancel') : t('common.edit')}
-                    </Button>
+                    />
                 )}
                 <Tooltip label={t(`common.${collapsed ? 'expand' : 'collapse'}`, {})}>
                     <ActionIcon

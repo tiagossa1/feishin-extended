@@ -15,7 +15,10 @@ import {
     PlayNextTextButton,
     PlayTextButton,
 } from '/@/renderer/features/shared/components/play-button';
-import { LONG_PRESS_PLAY_BEHAVIOR } from '/@/renderer/features/shared/components/play-button-group';
+import {
+    LONG_PRESS_PLAY_BEHAVIOR,
+    PlayTooltip,
+} from '/@/renderer/features/shared/components/play-button-group';
 import { usePlayButtonClick } from '/@/renderer/features/shared/hooks/use-play-button-click';
 import { useIsMutatingCreateFavorite } from '/@/renderer/features/shared/mutations/create-favorite-mutation';
 import { useIsMutatingDeleteFavorite } from '/@/renderer/features/shared/mutations/delete-favorite-mutation';
@@ -249,7 +252,7 @@ export const LibraryHeader = forwardRef(
                         <h1
                             className={styles.title}
                             style={{
-                                fontSize: calculateTitleSize(title),
+                                fontSize: compact ? undefined : calculateTitleSize(title),
                             }}
                         >
                             {title}
@@ -337,6 +340,7 @@ export const calculateTitleSize = (title: string) => {
 };
 
 interface LibraryHeaderMenuProps {
+    compactActions?: boolean;
     favorite?: boolean;
     onAlbumRadio?: () => void;
     onArtistRadio?: () => void;
@@ -349,6 +353,7 @@ interface LibraryHeaderMenuProps {
 }
 
 export const LibraryHeaderMenu = ({
+    compactActions = false,
     favorite,
     onAlbumRadio,
     onArtistRadio,
@@ -395,13 +400,57 @@ export const LibraryHeaderMenu = ({
     return (
         <div className={styles.libraryHeaderMenu}>
             <Group wrap="nowrap">
-                {onPlay && <PlayTextButton {...handlePlayNow.handlers} {...handlePlayNow.props} />}
-                {onPlay && (
-                    <PlayNextTextButton {...handlePlayNext.handlers} {...handlePlayNext.props} />
-                )}
-                {onPlay && (
-                    <PlayLastTextButton {...handlePlayLast.handlers} {...handlePlayLast.props} />
-                )}
+                {onPlay &&
+                    (compactActions ? (
+                        <PlayTooltip type={Play.NOW}>
+                            <ActionIcon
+                                aria-label={t('player.play')}
+                                icon="mediaPlay"
+                                radius="xl"
+                                size="lg"
+                                {...handlePlayNow.handlers}
+                                {...handlePlayNow.props}
+                            />
+                        </PlayTooltip>
+                    ) : (
+                        <PlayTextButton {...handlePlayNow.handlers} {...handlePlayNow.props} />
+                    ))}
+                {onPlay &&
+                    (compactActions ? (
+                        <PlayTooltip type={Play.NEXT}>
+                            <ActionIcon
+                                aria-label={t('player.addNext')}
+                                icon="mediaPlayNext"
+                                size="lg"
+                                variant="subtle"
+                                {...handlePlayNext.handlers}
+                                {...handlePlayNext.props}
+                            />
+                        </PlayTooltip>
+                    ) : (
+                        <PlayNextTextButton
+                            {...handlePlayNext.handlers}
+                            {...handlePlayNext.props}
+                        />
+                    ))}
+                {onPlay &&
+                    (compactActions ? (
+                        <PlayTooltip type={Play.LAST}>
+                            <ActionIcon
+                                aria-label={t('player.addLast')}
+                                icon="mediaPlayLast"
+                                size="lg"
+                                variant="subtle"
+                                {...handlePlayLast.handlers}
+                                {...handlePlayLast.props}
+                            />
+                        </PlayTooltip>
+                    ) : (
+                        <PlayLastTextButton
+                            {...handlePlayLast.handlers}
+                            {...handlePlayLast.props}
+                        />
+                    ))}
                 {onAlbumRadio && (
                     <ActionIcon
                         disabled={isPlayerFetching}

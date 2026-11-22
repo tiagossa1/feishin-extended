@@ -609,6 +609,7 @@ export const GeneralSettingsSchema = z.object({
     theme: z.string(),
     themeDark: z.string(),
     themeLight: z.string(),
+    uiBlurEnabled: z.boolean().default(true),
     upNextQueue: z.boolean(),
     useThemeAccentColor: z.boolean(),
     useThemePrimaryShade: z.boolean(),
@@ -1177,6 +1178,19 @@ export const playerItems: SortableItem<PlayerItem>[] = [
 ];
 
 export const sidebarItems: SidebarItemType[] = [
+    { disabled: false, id: 'Home', label: i18n.t('page.sidebar.home'), route: AppRoute.HOME },
+    {
+        disabled: false,
+        id: 'Playlists',
+        label: i18n.t('page.sidebar.playlists'),
+        route: AppRoute.PLAYLISTS,
+    },
+    {
+        disabled: false,
+        id: 'Tracks',
+        label: i18n.t('page.sidebar.tracks'),
+        route: AppRoute.LIBRARY_SONGS,
+    },
     {
         disabled: true,
         id: 'Now Playing',
@@ -1189,7 +1203,6 @@ export const sidebarItems: SidebarItemType[] = [
         label: i18n.t('page.sidebar.search'),
         route: generatePath(AppRoute.SEARCH, { itemType: LibraryItem.SONG }),
     },
-    { disabled: false, id: 'Home', label: i18n.t('page.sidebar.home'), route: AppRoute.HOME },
     {
         disabled: false,
         id: 'Favorites',
@@ -1201,12 +1214,6 @@ export const sidebarItems: SidebarItemType[] = [
         id: 'Albums',
         label: i18n.t('page.sidebar.albums'),
         route: AppRoute.LIBRARY_ALBUMS,
-    },
-    {
-        disabled: false,
-        id: 'Tracks',
-        label: i18n.t('page.sidebar.tracks'),
-        route: AppRoute.LIBRARY_SONGS,
     },
     {
         disabled: false,
@@ -1233,12 +1240,6 @@ export const sidebarItems: SidebarItemType[] = [
         route: AppRoute.LIBRARY_FOLDERS,
     },
     {
-        disabled: true,
-        id: 'Playlists',
-        label: i18n.t('page.sidebar.playlists'),
-        route: AppRoute.PLAYLISTS,
-    },
-    {
         disabled: false,
         id: 'Collections',
         label: i18n.t('page.sidebar.collections'),
@@ -1259,17 +1260,17 @@ export const sidebarItems: SidebarItemType[] = [
 ];
 
 const defaultHomeItemOrder: HomeItem[] = [
-    HomeItem.GENRES,
-    HomeItem.RANDOM,
+    HomeItem.PLAYLISTS,
     HomeItem.RECENTLY_ADDED,
     HomeItem.RECENTLY_RELEASED,
     HomeItem.RECENTLY_PLAYED,
     HomeItem.MOST_PLAYED,
-    HomeItem.PLAYLISTS,
+    HomeItem.GENRES,
+    HomeItem.RANDOM,
 ];
 
 const homeItems = defaultHomeItemOrder.map((id) => ({
-    disabled: false,
+    disabled: id === HomeItem.RANDOM,
     id,
 }));
 
@@ -1379,7 +1380,7 @@ const initialState: SettingsState = {
             commands: true,
             tracks: true,
         },
-        homeFeature: true,
+        homeFeature: false,
         homeFeatureStyle: HomeFeatureStyle.SINGLE,
         homeItems,
         imagePlaceholderPriority: 'thumbhash',
@@ -1452,6 +1453,7 @@ const initialState: SettingsState = {
         theme: AppTheme.DEFAULT_DARK,
         themeDark: AppTheme.DEFAULT_DARK,
         themeLight: AppTheme.DEFAULT_LIGHT,
+        uiBlurEnabled: true,
         upNextQueue: true,
         useThemeAccentColor: false,
         useThemePrimaryShade: true,
@@ -2972,6 +2974,8 @@ export const useTableSettings = (type: ItemListKey) =>
     useSettingsStore((state) => state.lists[type as keyof typeof state.lists]);
 
 export const useGeneralSettings = () => useSettingsStore((state) => state.general, shallow);
+
+export const useUiBlurEnabled = () => useSettingsStore((state) => state.general.uiBlurEnabled);
 
 export const usePlaybackType = () => useSettingsStore((state) => state.playback.type, shallow);
 

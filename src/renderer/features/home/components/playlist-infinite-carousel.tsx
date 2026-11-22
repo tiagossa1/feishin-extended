@@ -1,5 +1,7 @@
 import { useSuspenseInfiniteQuery } from '@tanstack/react-query';
 import { Suspense, useCallback, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router';
 
 import { api } from '/@/renderer/api';
 import { queryKeys } from '/@/renderer/api/query-keys';
@@ -11,7 +13,9 @@ import {
 import { DataRow, MemoizedItemCard } from '/@/renderer/components/item-card/item-card';
 import { useDefaultItemListControls } from '/@/renderer/components/item-list/helpers/item-list-controls';
 import { useGridRows } from '/@/renderer/components/item-list/helpers/use-grid-rows';
+import { AppRoute } from '/@/renderer/router/routes';
 import { useCurrentServerId } from '/@/renderer/store';
+import { Button } from '/@/shared/components/button/button';
 import {
     LibraryItem,
     Playlist,
@@ -26,11 +30,24 @@ interface PlaylistCarouselProps {
     containerQuery?: ReturnType<typeof useGridCarouselContainerQuery>;
     enableRefresh?: boolean;
     query?: Partial<Omit<PlaylistListQuery, 'startIndex'>>;
+    showAllLink?: boolean;
     title: React.ReactNode | string;
 }
 
 const BasePlaylistInfiniteCarousel = (props: PlaylistCarouselProps & { rows: DataRow[] }) => {
-    const { containerQuery, enableRefresh, query: additionalQuery, title } = props;
+    const {
+        containerQuery,
+        enableRefresh,
+        query: additionalQuery,
+        showAllLink = false,
+        title,
+    } = props;
+    const { t } = useTranslation();
+    const allLink = showAllLink ? (
+        <Button component={Link} size="compact-sm" to={AppRoute.PLAYLISTS} variant="subtle">
+            {t('page.home.viewAllPlaylists')}
+        </Button>
+    ) : undefined;
     const {
         data: playlists,
         fetchNextPage,
@@ -73,7 +90,7 @@ const BasePlaylistInfiniteCarousel = (props: PlaylistCarouselProps & { rows: Dat
     const firstPageItems = playlists?.pages[0]?.items || [];
 
     if (firstPageItems.length === 0) {
-        return null;
+        return allLink || null;
     }
 
     return (
@@ -82,6 +99,7 @@ const BasePlaylistInfiniteCarousel = (props: PlaylistCarouselProps & { rows: Dat
             containerQuery={containerQuery}
             enableRefresh={enableRefresh}
             hasNextPage={hasNextPage}
+            headerAction={allLink}
             isFetchingNextPage={isFetchingNextPage}
             loadNextPage={fetchNextPage}
             onNextPage={handleNextPage}
@@ -89,6 +107,7 @@ const BasePlaylistInfiniteCarousel = (props: PlaylistCarouselProps & { rows: Dat
             onRefresh={handleRefresh}
             placeholderItemType={LibraryItem.PLAYLIST}
             placeholderRows={props.rows}
+            rowCount={showAllLink ? 2 : 1}
             title={title}
         />
     );

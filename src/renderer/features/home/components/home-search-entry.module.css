@@ -1,0 +1,9 @@
+.form {
+    width: 100%;
+    max-width: 42rem;
+}
+
+.input {
+    background: var(--theme-colors-background-alternate);
+    border-color: alpha(var(--theme-colors-border), 0.6);
+}

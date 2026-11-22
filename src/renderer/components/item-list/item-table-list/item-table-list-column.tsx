@@ -25,6 +25,7 @@ import styles from './item-table-list-column.module.css';
 
 import i18n from '/@/i18n/i18n';
 import { useItemSelectionState } from '/@/renderer/components/item-list/helpers/item-list-state';
+import { getSongSortForColumn } from '/@/renderer/components/item-list/helpers/table-sort';
 import { isNoHorizontalPaddingColumn } from '/@/renderer/components/item-list/item-detail-list/utils';
 import { ActionsColumn } from '/@/renderer/components/item-list/item-table-list/columns/actions-column';
 import { AlbumArtistsColumn } from '/@/renderer/components/item-list/item-table-list/columns/album-artists-column';
@@ -380,6 +381,7 @@ export const ItemTableListColumn = memo(ItemTableListColumnBase, (prevProps, nex
         prevProps.columnType === nextProps.columnType &&
         prevProps.itemType === nextProps.itemType &&
         prevProps.enableHeader === nextProps.enableHeader &&
+        prevProps.sort === nextProps.sort &&
         prevProps.enableDrag === nextProps.enableDrag &&
         prevProps.groups === nextProps.groups &&
         prevProps.groupHeaderInfoByRowIndex === nextProps.groupHeaderInfoByRowIndex &&
@@ -1129,6 +1131,19 @@ export const TableColumnHeaderContainer = (
     },
 ) => {
     const columnConfig = props.columns[props.columnIndex];
+    const sortable =
+        !!props.sort && !props.sort.disabled && props.sort.sortableColumnIds.includes(props.type);
+    const sorted =
+        sortable &&
+        !!props.sort?.activeColumnId &&
+        getSongSortForColumn(props.type) === getSongSortForColumn(props.sort.activeColumnId);
+    const reorderHandleRef = useRef<HTMLSpanElement>(null);
+    const label =
+        typeof columnLabelMap[props.type] === 'string'
+            ? (columnLabelMap[props.type] as string)
+            : props.type === TableColumn.DURATION
+              ? i18n.t('common.duration')
+              : '#';
     // Use the actual rendered width from style if available, otherwise fall back to config width
     const currentWidth = (props.style?.width as number | undefined) || columnConfig.width;
 
@@ -1159,6 +1174,7 @@ export const TableColumnHeaderContainer = (
 
         return combine(
             draggable({
+                dragHandle: sortable ? (reorderHandleRef.current ?? undefined) : undefined,
                 element: containerRef.current,
                 getInitialData: () => {
                     const data = dndUtils.generateDragData(
@@ -1232,10 +1248,19 @@ export const TableColumnHeaderContainer = (
                 },
             }),
         );
-    }, [props.type, props.enableColumnReorder, props.controls, props.tableId]);
+    }, [props.type, props.enableColumnReorder, props.controls, props.tableId, sortable]);
 
     return (
         <Flex
+            aria-sort={
+                sortable
+                    ? sorted
+                        ? props.sort?.direction === 'ASC'
+                            ? 'ascending'
+                            : 'descending'
+                        : 'none'
+                    : undefined
+            }
             className={clsx(styles.container, styles.headerContainer, props.containerClassName, {
                 [styles.headerDraggedOverLeft]: isDraggedOver === 'left',
                 [styles.headerDraggedOverRight]: isDraggedOver === 'right',
@@ -1246,20 +1271,47 @@ export const TableColumnHeaderContainer = (
                 [styles.paddingSm]: props.cellPadding === 'sm',
                 [styles.paddingXl]: props.cellPadding === 'xl',
                 [styles.paddingXs]: props.cellPadding === 'xs',
+                [styles.sortableHeader]: sortable,
             })}
             ref={containerRef}
+            role="columnheader"
             style={props.style}
         >
-            <Text
-                className={clsx(styles.headerContent, props.className, {
-                    [styles.center]: props.columns[props.columnIndex].align === 'center',
-                    [styles.left]: props.columns[props.columnIndex].align === 'start',
-                    [styles.right]: props.columns[props.columnIndex].align === 'end',
-                })}
-                isNoSelect
-            >
-                {columnLabelMap[props.type]}
-            </Text>
+            {sortable ? (
+                <>
+                    <button
+                        aria-label={i18n.t('table.sortByColumn', { column: label })}
+                        className={clsx(styles.sortButton, styles.headerContent)}
+                        onClick={() => props.sort?.onSort(props.type)}
+                        onKeyDown={(event) => event.stopPropagation()}
+                        type="button"
+                    >
+                        {columnLabelMap[props.type]}
+                        {sorted && (
+                            <Icon
+                                icon={props.sort?.direction === 'ASC' ? 'arrowUp' : 'arrowDown'}
+                                size="xs"
+                            />
+                        )}
+                    </button>
+                    {props.enableColumnReorder && (
+                        <span aria-hidden className={styles.reorderHandle} ref={reorderHandleRef}>
+                            <Icon icon="dragVertical" size="xs" />
+                        </span>
+                    )}
+                </>
+            ) : (
+                <Text
+                    className={clsx(styles.headerContent, props.className, {
+                        [styles.center]: props.columns[props.columnIndex].align === 'center',
+                        [styles.left]: props.columns[props.columnIndex].align === 'start',
+                        [styles.right]: props.columns[props.columnIndex].align === 'end',
+                    })}
+                    isNoSelect
+                >
+                    {columnLabelMap[props.type]}
+                </Text>
+            )}
             {props.enableColumnResize && (
                 <ColumnResizeHandle
                     columnId={props.type}

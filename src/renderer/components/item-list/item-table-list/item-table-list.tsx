@@ -72,6 +72,7 @@ import {
     ItemControls,
     ItemListHandle,
     ItemTableListColumnConfig,
+    ItemTableSort,
 } from '/@/renderer/components/item-list/types';
 import { PlayerContext, usePlayer } from '/@/renderer/features/player/context/player-context';
 import {
@@ -413,6 +414,7 @@ const VirtualizedTableGrid = ({
             playlistId: tableConfig.playlistId,
             setAlbumGroupContentHeight,
             size: tableConfig.size,
+            sort: tableConfig.sort,
             startRowIndex: tableConfig.startRowIndex,
             tableId: tableConfig.tableId,
         }),
@@ -795,6 +797,7 @@ export interface TableItemProps {
     playlistId?: string;
     setAlbumGroupContentHeight?: (groupKey: string, height: number) => void;
     size?: ItemTableListProps['size'];
+    sort?: ItemTableSort;
     startRowIndex?: number;
     tableId: string;
 }
@@ -846,6 +849,7 @@ interface ItemTableListProps {
     ref?: Ref<ItemListHandle>;
     rowHeight?: ((index: number, cellProps: TableItemProps) => number) | number;
     size?: 'compact' | 'default' | 'large';
+    sort?: ItemTableSort;
     startRowIndex?: number;
 }
 
@@ -1277,6 +1281,7 @@ const BaseItemTableList = ({
     ref,
     rowHeight,
     size = 'default',
+    sort,
     startRowIndex,
 }: ItemTableListProps) => {
     const { playlistId: routePlaylistId } = useParams() as { playlistId?: string };
@@ -1759,6 +1764,7 @@ const BaseItemTableList = ({
             playerContext,
             playlistId: routePlaylistId,
             size,
+            sort,
             tableId,
         }),
         [
@@ -1785,6 +1791,7 @@ const BaseItemTableList = ({
             playerContext,
             routePlaylistId,
             size,
+            sort,
             tableId,
             totalColumnCount,
         ],
@@ -1831,6 +1838,7 @@ const BaseItemTableList = ({
             playerContext,
             playlistId: routePlaylistId,
             size,
+            sort,
             startRowIndex,
             tableId,
         }),
@@ -1855,6 +1863,7 @@ const BaseItemTableList = ({
             playerContext,
             routePlaylistId,
             size,
+            sort,
             startRowIndex,
             tableId,
         ],

@@ -1,12 +1,15 @@
 import { Suspense, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import styles from './home-route.module.css';
+
 import { useGridCarouselContainerQuery } from '/@/renderer/components/grid-carousel/grid-carousel-v2';
 import { NativeScrollArea } from '/@/renderer/components/native-scroll-area/native-scroll-area';
 import { AlbumInfiniteCarousel } from '/@/renderer/features/albums/components/album-infinite-carousel';
 import { AlbumInfiniteFeatureCarousel } from '/@/renderer/features/home/components/album-infinite-feature-carousel';
 import { AlbumInfiniteSingleFeatureCarousel } from '/@/renderer/features/home/components/album-infinite-single-feature-carousel';
 import { FeaturedGenres } from '/@/renderer/features/home/components/featured-genres';
+import { HomeSearchEntry } from '/@/renderer/features/home/components/home-search-entry';
 import { PlaylistInfiniteCarousel } from '/@/renderer/features/home/components/playlist-infinite-carousel';
 import { AnimatedPage } from '/@/renderer/features/shared/components/animated-page';
 import { LibraryContainer } from '/@/renderer/features/shared/components/library-container';
@@ -112,12 +115,13 @@ const HomeRoute = () => {
             >
                 <LibraryContainer>
                     <Stack
+                        className={styles.content}
                         gap="2xl"
                         mb="5rem"
                         pt={windowBarStyle === Platform.WEB ? '5rem' : '3rem'}
-                        px="2rem"
                         ref={containerQuery.ref}
                     >
+                        <HomeSearchEntry />
                         {homeFeature && homeFeatureStyle === HomeFeatureStyle.SINGLE && (
                             <AlbumInfiniteSingleFeatureCarousel />
                         )}
@@ -135,6 +139,7 @@ const HomeRoute = () => {
                                         containerQuery={containerQuery}
                                         enableRefresh={carousels[item.id].enableRefresh}
                                         key="home-playlists"
+                                        showAllLink
                                         title={t('page.home.playlists')}
                                     />
                                 );

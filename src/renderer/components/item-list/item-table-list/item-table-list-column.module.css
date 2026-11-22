@@ -220,6 +220,48 @@
     background: none;
 }
 
+.header-container.sortable-header {
+    flex-direction: row;
+    gap: 4px;
+    align-items: center;
+}
+
+.sort-button {
+    flex: 1;
+    gap: 6px;
+    justify-content: flex-start;
+    min-width: 0;
+    height: 100%;
+    padding: 0;
+    font: inherit;
+    color: inherit;
+    cursor: pointer;
+    background: none;
+    border: 0;
+
+    &:hover {
+        color: var(--theme-colors-primary);
+    }
+
+    &:focus-visible {
+        outline: 2px solid var(--theme-colors-primary);
+        outline-offset: -2px;
+    }
+}
+
+.reorder-handle {
+    display: inline-flex;
+    flex-shrink: 0;
+    align-items: center;
+    padding-block: 8px;
+    cursor: grab;
+    opacity: 0.4;
+
+    &:hover {
+        opacity: 1;
+    }
+}
+
 .header-container.padding-xs {
     padding: 0 var(--theme-spacing-xs);
 }

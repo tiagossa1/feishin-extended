@@ -10,7 +10,15 @@
         background: darken(var(--theme-colors-background), 10%);
     }
 
-    transition: background 0.5s;
+    background: color-mix(in srgb, var(--theme-colors-background) var(--ui-chrome-opacity, 100%), transparent);
+    border-top: 1px solid alpha(var(--theme-colors-border), 0.5);
+    backdrop-filter: var(--ui-chrome-blur, none);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .container {
+        transition: none;
+    }
 }
 
 .open-drawer {

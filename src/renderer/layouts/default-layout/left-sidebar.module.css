@@ -2,5 +2,7 @@
     position: relative;
     grid-area: sidebar;
     background: var(--theme-colors-background-alternate);
+    background: color-mix(in srgb, var(--theme-colors-background-alternate) var(--ui-chrome-opacity, 100%), transparent);
     border-right: 1px solid alpha(var(--theme-colors-border), 0.5);
+    backdrop-filter: var(--ui-chrome-blur, none);
 }

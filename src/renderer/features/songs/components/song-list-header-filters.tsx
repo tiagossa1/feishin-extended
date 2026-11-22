@@ -19,6 +19,7 @@ import { ListSortOrderToggleButton } from '/@/renderer/features/shared/component
 import { FILTER_KEYS } from '/@/renderer/features/shared/utils';
 import { useSongListFilters } from '/@/renderer/features/songs/hooks/use-song-list-filters';
 import { GenreTarget, useGenreTarget, useSettingsStoreActions } from '/@/renderer/store';
+import { ActionIcon } from '/@/shared/components/action-icon/action-icon';
 import { Button } from '/@/shared/components/button/button';
 import { Divider } from '/@/shared/components/divider/divider';
 import { Flex } from '/@/shared/components/flex/flex';
@@ -83,6 +84,14 @@ export const SongListHeaderFilters = ({ toggleGenreTarget }: { toggleGenreTarget
                     defaultSortByValue={SongListSort.NAME}
                     itemType={LibraryItem.SONG}
                     listKey={pageKey as ItemListKey}
+                    target={
+                        <ActionIcon
+                            aria-label={t('common.sort')}
+                            icon="sort"
+                            tooltip={{ label: t('common.sort') }}
+                            variant="subtle"
+                        />
+                    }
                 />
                 <Divider orientation="vertical" />
                 <ListSortOrderToggleButton

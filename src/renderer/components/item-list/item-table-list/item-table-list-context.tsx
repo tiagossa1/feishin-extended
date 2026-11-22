@@ -14,7 +14,11 @@ import { useSyncExternalStore } from 'react';
 import type { TableItemProps } from './item-table-list';
 
 import { ItemListStateActions } from '/@/renderer/components/item-list/helpers/item-list-state';
-import { ItemControls, ItemTableListColumnConfig } from '/@/renderer/components/item-list/types';
+import {
+    ItemControls,
+    ItemTableListColumnConfig,
+    ItemTableSort,
+} from '/@/renderer/components/item-list/types';
 import { PlayerContext } from '/@/renderer/features/player/context/player-context';
 import { LibraryItem } from '/@/shared/types/domain-types';
 
@@ -39,6 +43,7 @@ export type ItemTableListConfig = {
     playerContext: PlayerContext;
     playlistId?: string;
     size: 'compact' | 'default' | 'large';
+    sort?: ItemTableSort;
     startRowIndex?: number;
     tableId: string;
 };

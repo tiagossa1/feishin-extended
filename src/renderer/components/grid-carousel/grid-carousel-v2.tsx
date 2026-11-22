@@ -35,6 +35,7 @@ interface GridCarouselProps {
     containerQuery?: ReturnType<typeof useGridCarouselContainerQuery>;
     enableRefresh?: boolean;
     hasNextPage?: boolean;
+    headerAction?: ReactNode;
     isFetchingNextPage?: boolean;
     loadNextPage?: () => void;
     onNextPage: (page: number) => void;
@@ -68,6 +69,7 @@ function BaseGridCarousel(props: GridCarouselProps) {
         containerQuery: providedContainerQuery,
         enableRefresh = false,
         hasNextPage,
+        headerAction,
         isFetchingNextPage,
         loadNextPage,
         onNextPage,
@@ -287,6 +289,7 @@ function BaseGridCarousel(props: GridCarouselProps) {
                                     )}
                                 </Group>
                                 <Group gap="xs" justify="end">
+                                    {headerAction}
                                     <ActionIcon
                                         disabled={isPrevDisabled}
                                         icon="arrowLeftS"

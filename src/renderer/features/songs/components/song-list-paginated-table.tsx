@@ -1,4 +1,5 @@
 import { UseSuspenseQueryOptions } from '@tanstack/react-query';
+import { useLocation } from 'react-router';
 
 import { api } from '/@/renderer/api';
 import { useItemListPaginatedLoader } from '/@/renderer/components/item-list/helpers/item-list-paginated-loader';
@@ -11,7 +12,9 @@ import { ItemTableList } from '/@/renderer/components/item-list/item-table-list/
 import { ItemTableListColumn } from '/@/renderer/components/item-list/item-table-list/item-table-list-column';
 import { ItemListTableComponentProps } from '/@/renderer/components/item-list/types';
 import { useListContext } from '/@/renderer/context/list-context';
+import { useTableSort } from '/@/renderer/features/shared/hooks/use-table-sort';
 import { songsQueries } from '/@/renderer/features/songs/api/songs-api';
+import { useIsMobile } from '/@/renderer/hooks/use-is-mobile';
 import { usePlayerSong } from '/@/renderer/store';
 import { LibraryItem, SongListQuery, SongListSort, SortOrder } from '/@/shared/types/domain-types';
 import { ItemListKey } from '/@/shared/types/types';
@@ -36,7 +39,14 @@ export const SongListPaginatedTable = ({
     serverId,
     size = 'default',
 }: SongListPaginatedTableProps) => {
+    const isMobile = useIsMobile();
     const { pageKey } = useListContext();
+    const { pathname } = useLocation();
+    const sort = useTableSort({
+        defaultSortBy: SongListSort.NAME,
+        disabled: pathname !== '/library/songs',
+        listKey: ItemListKey.SONG,
+    });
     const { currentPage, onChange } = useItemListPagination();
 
     const listCountQuery = songsQueries.listCount({
@@ -83,7 +93,7 @@ export const SongListPaginatedTable = ({
         >
             <ItemTableList
                 activeRowId={currentSong?.id}
-                autoFitColumns={autoFitColumns}
+                autoFitColumns={autoFitColumns && !isMobile}
                 CellComponent={ItemTableListColumn}
                 columns={columns}
                 data={data || []}
@@ -103,6 +113,7 @@ export const SongListPaginatedTable = ({
                 onColumnResized={handleColumnResized}
                 onScrollEnd={handleOnScrollEnd}
                 size={size}
+                sort={sort}
                 startRowIndex={startRowIndex}
             />
         </ItemListWithPagination>

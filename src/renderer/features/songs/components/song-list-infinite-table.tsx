@@ -1,4 +1,5 @@
 import { UseSuspenseQueryOptions } from '@tanstack/react-query';
+import { useLocation } from 'react-router';
 
 import { api } from '/@/renderer/api';
 import { useItemListInfiniteLoader } from '/@/renderer/components/item-list/helpers/item-list-infinite-loader';
@@ -9,7 +10,9 @@ import { ItemTableList } from '/@/renderer/components/item-list/item-table-list/
 import { ItemTableListColumn } from '/@/renderer/components/item-list/item-table-list/item-table-list-column';
 import { ItemListTableComponentProps } from '/@/renderer/components/item-list/types';
 import { useListContext } from '/@/renderer/context/list-context';
+import { useTableSort } from '/@/renderer/features/shared/hooks/use-table-sort';
 import { songsQueries } from '/@/renderer/features/songs/api/songs-api';
+import { useIsMobile } from '/@/renderer/hooks/use-is-mobile';
 import { usePlayerSong } from '/@/renderer/store';
 import { LibraryItem, SongListQuery, SongListSort, SortOrder } from '/@/shared/types/domain-types';
 import { ItemListKey } from '/@/shared/types/types';
@@ -34,6 +37,7 @@ export const SongListInfiniteTable = ({
     serverId,
     size = 'default',
 }: SongListInfiniteTableProps) => {
+    const isMobile = useIsMobile();
     const listCountQuery = songsQueries.listCount({
         query: { ...query, limit: itemsPerPage },
         serverId: serverId,
@@ -41,6 +45,12 @@ export const SongListInfiniteTable = ({
 
     const listQueryFn = api.controller.getSongList;
     const { pageKey } = useListContext();
+    const { pathname } = useLocation();
+    const sort = useTableSort({
+        defaultSortBy: SongListSort.NAME,
+        disabled: pathname !== '/library/songs',
+        listKey: ItemListKey.SONG,
+    });
 
     const { getItem, getItemIndex, getLoadedItems, itemCount, loadedItems, onRangeChanged } =
         useItemListInfiniteLoader({
@@ -70,7 +80,7 @@ export const SongListInfiniteTable = ({
     return (
         <ItemTableList
             activeRowId={currentSong?.id}
-            autoFitColumns={autoFitColumns}
+            autoFitColumns={autoFitColumns && !isMobile}
             CellComponent={ItemTableListColumn}
             columns={columns}
             data={loadedItems}
@@ -95,6 +105,7 @@ export const SongListInfiniteTable = ({
             onRangeChanged={onRangeChanged}
             onScrollEnd={handleOnScrollEnd}
             size={size}
+            sort={sort}
         />
     );
 };

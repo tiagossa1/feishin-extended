@@ -8,6 +8,7 @@ import {
     LibraryItem,
     Playlist,
     Song,
+    SortOrder,
 } from '/@/shared/types/domain-types';
 import { Play, TableColumn } from '/@/shared/types/types';
 
@@ -101,4 +102,12 @@ export interface ItemTableListColumnConfig {
     isEnabled: boolean;
     pinned: 'left' | 'right' | null;
     width: number;
+}
+
+export interface ItemTableSort {
+    activeColumnId?: TableColumn;
+    direction: SortOrder;
+    disabled?: boolean;
+    onSort: (columnId: TableColumn) => void;
+    sortableColumnIds: readonly TableColumn[];
 }

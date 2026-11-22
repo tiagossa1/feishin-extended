@@ -237,6 +237,7 @@ export const PlaylistDetailSongListHeader = ({
                             </Spoiler>
                         ) : null}
                         <LibraryHeaderMenu
+                            compactActions
                             onPlay={(type) => handlePlay(type)}
                             onShuffle={() => handlePlay(Play.SHUFFLE)}
                         />

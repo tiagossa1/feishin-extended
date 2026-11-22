@@ -654,6 +654,8 @@
             "title": "Commands"
         },
         "home": {
+            "searchTracks": "Search tracks",
+            "viewAllPlaylists": "View all playlists",
             "explore": "Explore from your library",
             "genres": "$t(entity.genre, {\"count\": 2})",
             "mostPlayed": "Most Played",
@@ -864,6 +866,8 @@
         "autosaveCount_description": "How many track changes before the queue is saved. 1 (minimum) means every song change",
         "accentColor_description": "Sets the accent color for the application",
         "accentColor": "Accent color",
+        "uiBlurEnabled": "Interface blur",
+        "uiBlurEnabled_description": "Use translucent backgrounds in the sidebar and player. Reduced transparency preferences are respected.",
         "useThemeAccentColor": "Use theme accent color",
         "useThemeAccentColor_description": "Use the primary color defined in the selected theme instead of the custom accent color",
         "useThemePrimaryShade": "Use theme primary shade",
@@ -1347,6 +1351,7 @@
         "sidebarImageEnabled_description": "Show a button on the player bar's album art to expand it into the sidebar. Disabling this also hides the button and collapses the album art if it is currently expanded"
     },
     "table": {
+        "sortByColumn": "Sort by {{column}}",
         "column": {
             "album": "Album",
             "albumArtist": "Album artist",

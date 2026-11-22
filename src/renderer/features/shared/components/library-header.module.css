@@ -65,47 +65,60 @@
     }
 
     &.compact {
+        grid-template-areas: 'image info';
+        grid-template-columns: 96px minmax(0, 1fr);
+        gap: var(--theme-spacing-md);
         min-height: unset;
-        padding: var(--theme-spacing-md) var(--theme-spacing-xs);
+        padding: 2.5rem 1rem 1rem;
+
+        .metadata-section {
+            align-items: flex-start;
+            text-align: left;
+        }
+
+        .title {
+            font-size: clamp(1.75rem, 3cqw, 2.375rem);
+            overflow-wrap: anywhere;
+        }
 
         :global(.item-image-placeholder) {
-            width: 250px !important;
-            height: 250px;
+            width: 96px !important;
+            height: 96px;
         }
 
         .image {
-            width: 250px !important;
-            height: 250px;
+            width: 96px !important;
+            height: 96px;
         }
 
         @container (min-width: $mantine-breakpoint-sm) {
-            grid-template-columns: 200px minmax(0, 1fr);
+            grid-template-columns: 144px minmax(0, 1fr);
             min-height: unset;
             padding: var(--theme-spacing-md) var(--theme-spacing-sm);
 
             .image {
-                width: 200px !important;
-                height: 200px;
+                width: 144px !important;
+                height: 144px;
             }
 
             :global(.item-image-placeholder) {
-                width: 200px !important;
-                height: 200px;
+                width: 144px !important;
+                height: 144px;
             }
         }
 
         @container (min-width: $mantine-breakpoint-lg) {
-            grid-template-columns: 200px minmax(0, 1fr);
+            grid-template-columns: 144px minmax(0, 1fr);
             padding: var(--theme-spacing-md) var(--theme-spacing-md);
 
             .image {
-                width: 200px !important;
-                height: 200px;
+                width: 144px !important;
+                height: 144px;
             }
 
             :global(.item-image-placeholder) {
-                width: 200px !important;
-                height: 200px;
+                width: 144px !important;
+                height: 144px;
             }
         }
     }
@@ -135,7 +148,8 @@
     transition: opacity 120ms ease;
 }
 
-.image-section:hover .image-overlay {
+.image-section:hover .image-overlay,
+.image-section:focus-within .image-overlay {
     pointer-events: auto;
     opacity: 1;
 }

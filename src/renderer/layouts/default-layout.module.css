@@ -1,4 +1,8 @@
 .layout {
+    --ui-chrome-blur: none;
+    --ui-reader-blur: none;
+    --ui-chrome-opacity: 100%;
+
     display: grid;
     grid-template-areas:
         'window-bar'
@@ -10,6 +14,43 @@
     gap: 0;
     height: 100%;
     overflow: hidden;
+}
+
+@supports (backdrop-filter: blur(1px)) {
+    .blur-enabled {
+        --ui-chrome-blur: blur(22px);
+        --ui-reader-blur: blur(8px);
+        --ui-chrome-opacity: 82%;
+    }
+}
+
+.blur-disabled :global(#player-bar) {
+    background: var(--theme-colors-background) !important;
+    backdrop-filter: none !important;
+}
+
+.blur-disabled :global(#sidebar) {
+    background: var(--theme-colors-background-alternate) !important;
+    backdrop-filter: none !important;
+}
+
+@media (prefers-reduced-transparency: reduce) {
+    .blur-enabled {
+        --ui-chrome-blur: none;
+        --ui-reader-blur: none;
+        --ui-chrome-opacity: 100%;
+    }
+
+    .layout :global(#player-bar),
+    .blur-enabled :global(#player-bar) {
+        background: var(--theme-colors-background) !important;
+        backdrop-filter: none !important;
+    }
+
+    .layout :global(#sidebar) {
+        background: var(--theme-colors-background-alternate) !important;
+        backdrop-filter: none !important;
+    }
 }
 
 .windows {

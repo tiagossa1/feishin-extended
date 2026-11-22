@@ -3,6 +3,7 @@ import { AnimatePresence } from 'motion/react';
 import { Suspense } from 'react';
 import { Outlet } from 'react-router';
 
+import chromeStyles from '../default-layout.module.css';
 import styles from './mobile-layout.module.css';
 
 import { ContextMenuController } from '/@/renderer/features/context-menu/context-menu-controller';
@@ -12,6 +13,7 @@ import { MobileSidebar } from '/@/renderer/features/sidebar/components/mobile-si
 import { PlayerBar } from '/@/renderer/layouts/default-layout/player-bar';
 import { WindowBar } from '/@/renderer/layouts/window-bar';
 import { useFullScreenPlayerOverlayState, useWindowBarStyle } from '/@/renderer/store';
+import { useUiBlurEnabled } from '/@/renderer/store/settings.store';
 import { ActionIcon } from '/@/shared/components/action-icon/action-icon';
 import { Drawer } from '/@/shared/components/drawer/drawer';
 import { Spinner } from '/@/shared/components/spinner/spinner';
@@ -29,11 +31,14 @@ export const MobileLayout = ({ shell }: MobileLayoutProps) => {
         visualizerExpanded: isFullScreenVisualizerExpanded,
     } = useFullScreenPlayerOverlayState();
     const windowBarStyle = useWindowBarStyle();
+    const uiBlurEnabled = useUiBlurEnabled();
 
     return (
         <>
             <div
                 className={clsx(styles.layout, {
+                    [chromeStyles.blurDisabled]: !uiBlurEnabled,
+                    [chromeStyles.blurEnabled]: uiBlurEnabled,
                     [styles.macos]: windowBarStyle === Platform.MACOS,
                     [styles.windows]: windowBarStyle === Platform.WINDOWS,
                 })}

@@ -201,6 +201,19 @@ export const ThemeSettings = memo(() => {
         {
             control: (
                 <Switch
+                    aria-label={t('setting.uiBlurEnabled')}
+                    checked={settings.uiBlurEnabled}
+                    onChange={(e) =>
+                        setSettings({ general: { uiBlurEnabled: e.currentTarget.checked } })
+                    }
+                />
+            ),
+            description: t('setting.uiBlurEnabled', { context: 'description' }),
+            title: t('setting.uiBlurEnabled'),
+        },
+        {
+            control: (
+                <Switch
                     defaultChecked={settings.followSystemTheme}
                     onChange={(e) => {
                         setSettings({

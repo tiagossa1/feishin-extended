@@ -7,7 +7,11 @@ import { ContextMenuController } from '/@/renderer/features/context-menu/context
 import { MainContent } from '/@/renderer/layouts/default-layout/main-content';
 import { PlayerBar } from '/@/renderer/layouts/default-layout/player-bar';
 import { WindowBar } from '/@/renderer/layouts/window-bar';
-import { useSettingsStore, useWindowBarStyle } from '/@/renderer/store/settings.store';
+import {
+    useSettingsStore,
+    useUiBlurEnabled,
+    useWindowBarStyle,
+} from '/@/renderer/store/settings.store';
 import { Platform, PlayerType } from '/@/shared/types/types';
 
 // MPV and DLNA need the desktop app; the web and jukebox players also work in a browser
@@ -27,11 +31,14 @@ interface DefaultLayoutProps {
 
 export const DefaultLayout = ({ shell }: DefaultLayoutProps) => {
     const windowBarStyle = useWindowBarStyle();
+    const uiBlurEnabled = useUiBlurEnabled();
 
     return (
         <>
             <div
                 className={clsx(styles.layout, {
+                    [styles.blurDisabled]: !uiBlurEnabled,
+                    [styles.blurEnabled]: uiBlurEnabled,
                     [styles.macos]: windowBarStyle === Platform.MACOS,
                     [styles.windows]: windowBarStyle === Platform.WINDOWS,
                 })}

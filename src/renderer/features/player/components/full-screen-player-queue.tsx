@@ -13,9 +13,9 @@ import {
     useFullScreenPlayerStore,
     useFullScreenPlayerStoreActions,
 } from '/@/renderer/store/full-screen-player.store';
-import { ActionIcon } from '/@/shared/components/action-icon/action-icon';
+import { Button } from '/@/shared/components/button/button';
 import { Group } from '/@/shared/components/group/group';
-import { AppIcon } from '/@/shared/components/icon/icon';
+import { AppIcon, Icon } from '/@/shared/components/icon/icon';
 import { ItemListKey } from '/@/shared/types/types';
 
 const AudioMotionAnalyzerVisualizer = lazy(() =>
@@ -119,18 +119,17 @@ const Controls = () => {
             pos="absolute"
         >
             {headerItems.map((item) => (
-                <div key={`tab-${item.label}`}>
-                    <ActionIcon
-                        icon={item.icon}
-                        iconProps={{
-                            color: item.active ? 'primary' : undefined,
-                            size: 'lg',
-                        }}
-                        onClick={item.onClick}
-                        tooltip={{ label: item.label }}
-                        variant="subtle"
-                    ></ActionIcon>
-                </div>
+                <Button
+                    aria-label={item.label}
+                    aria-pressed={item.active}
+                    key={`tab-${item.label}`}
+                    leftSection={<Icon icon={item.icon} size="sm" />}
+                    onClick={item.onClick}
+                    size="compact-sm"
+                    variant={item.active ? 'light' : 'subtle'}
+                >
+                    {item.label}
+                </Button>
             ))}
         </Group>
     );

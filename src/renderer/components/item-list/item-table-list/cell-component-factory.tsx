@@ -21,6 +21,7 @@ export const createColumnCellComponent = (
                 prevProps.data === nextProps.data &&
                 prevProps.style === nextProps.style &&
                 prevProps.columns === nextProps.columns &&
+                (prevProps.rowIndex !== 0 || prevProps.sort === nextProps.sort) &&
                 prevProps.playlistId === nextProps.playlistId
             );
         },
