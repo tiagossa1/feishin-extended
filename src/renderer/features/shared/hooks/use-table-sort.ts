@@ -36,22 +36,19 @@ export function useTableSort({
 }): ItemTableSort {
     const serverId = useCurrentServerId();
     const serverType = useCurrentServer()?.type;
+    const isDisabled =
+        disabled || (serverType === ServerType.SUBSONIC && listKey !== ItemListKey.PLAYLIST_SONG);
     const { sortBy } = useSortByFilter<SongListSort>(defaultSortBy, listKey);
     const { sortOrder } = useSortOrderFilter(SortOrder.ASC, listKey);
     const { setFilters } = useListFilterPersistence(serverId, listKey);
     const [, setSearchParams] = useSearchParams();
     const sortableColumnIds = useMemo(() => {
         if (listKey === ItemListKey.PLAYLIST_SONG) return [...songColumns, TableColumn.ROW_INDEX];
-        if (serverType === ServerType.SUBSONIC) {
-            return songColumns.filter(
-                (column) => getSongSortForColumn(column) === SongListSort.NAME,
-            );
-        }
         return songColumns;
-    }, [listKey, serverType]);
+    }, [listKey]);
 
     const onSort = (columnId: TableColumn) => {
-        if (disabled || !sortableColumnIds.includes(columnId)) return;
+        if (isDisabled || !sortableColumnIds.includes(columnId)) return;
         const requested = getSongSortForColumn(columnId) as SongListSort | undefined;
         if (!requested) return;
         const next = getNextTableSort({ sortBy, sortOrder }, requested);
@@ -68,7 +65,7 @@ export function useTableSort({
     return {
         activeColumnId: sortableColumnIds.find((column) => getSongSortForColumn(column) === sortBy),
         direction: sortOrder,
-        disabled,
+        disabled: isDisabled,
         onSort,
         sortableColumnIds,
     };

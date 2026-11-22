@@ -1,6 +1,7 @@
 import { getDraggedItems } from '/@/renderer/components/item-list/helpers/get-dragged-items';
 import { useItemDraggingState } from '/@/renderer/components/item-list/helpers/item-list-state';
 import { ItemListStateActions } from '/@/renderer/components/item-list/helpers/item-list-state';
+import { getPlaylistItemId } from '/@/renderer/components/item-list/helpers/playlist-order';
 import { eventEmitter } from '/@/renderer/events/event-emitter';
 import { PlayerContext } from '/@/renderer/features/player/context/player-context';
 import { useDragDrop } from '/@/renderer/hooks/use-drag-drop';
@@ -107,7 +108,8 @@ export const useItemDragDropState = <TElement extends HTMLElement = HTMLDivEleme
                       if (
                           itemType === LibraryItem.PLAYLIST_SONG &&
                           args.source.itemType === LibraryItem.PLAYLIST_SONG &&
-                          args.source.metadata?.fromReorderHandle === true
+                          args.source.metadata?.fromReorderHandle === true &&
+                          args.source.metadata?.playlistId === playlistId
                       ) {
                           return true;
                       }
@@ -116,7 +118,11 @@ export const useItemDragDropState = <TElement extends HTMLElement = HTMLDivEleme
                   },
                   getData: () => {
                       return {
-                          id: [(item as unknown as { id: string }).id],
+                          id: [
+                              itemType === LibraryItem.PLAYLIST_SONG
+                                  ? getPlaylistItemId(item as Song)
+                                  : (item as { id: string }).id,
+                          ],
                           item: [item as unknown as unknown[]],
                           itemType,
                           type: DragTargetMap[itemType] || DragTarget.GENERIC,
@@ -308,10 +314,11 @@ export const useItemDragDropState = <TElement extends HTMLElement = HTMLDivEleme
                           args.self.itemType === LibraryItem.PLAYLIST_SONG &&
                           args.source.itemType === LibraryItem.PLAYLIST_SONG &&
                           args.source.metadata?.fromReorderHandle === true &&
+                          args.source.metadata?.playlistId === playlistId &&
                           playlistId
                       ) {
-                          const sourceItems = (args.source.item || []) as any[];
-                          const targetItem = item as any;
+                          const sourceItems = (args.source.item || []) as Song[];
+                          const targetItem = item as Song;
 
                           if (
                               sourceItems.length > 0 &&
@@ -323,8 +330,8 @@ export const useItemDragDropState = <TElement extends HTMLElement = HTMLDivEleme
                               eventEmitter.emit('PLAYLIST_REORDER', {
                                   edge: args.edge,
                                   playlistId,
-                                  sourceIds: args.source.id,
-                                  targetId: targetItem.id,
+                                  sourceIds: sourceItems.map(getPlaylistItemId),
+                                  targetId: getPlaylistItemId(targetItem),
                               });
                           }
                       }

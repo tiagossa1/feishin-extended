@@ -99,6 +99,7 @@ export const FILTER_KEYS = {
 interface CreateFuseOptions {
     fieldNormWeight?: number;
     ignoreLocation?: boolean;
+    shouldSort?: boolean;
     threshold?: number;
 }
 
@@ -110,13 +111,19 @@ export const createFuseForLibraryItem = <T extends FuseSearchableItem>(
     itemType: LibraryItem,
     options: CreateFuseOptions = {},
 ): Fuse<T> => {
-    const { fieldNormWeight = 1, ignoreLocation = true, threshold = 0.3 } = options;
+    const {
+        fieldNormWeight = 1,
+        ignoreLocation = true,
+        shouldSort = true,
+        threshold = 0.3,
+    } = options;
 
     if (items.length === 0) {
         return new Fuse(items, {
             fieldNormWeight,
             ignoreLocation,
             keys: [],
+            shouldSort,
             threshold,
         });
     }
@@ -209,6 +216,7 @@ export const createFuseForLibraryItem = <T extends FuseSearchableItem>(
         fieldNormWeight,
         ignoreLocation,
         keys: [...stringKeys, ...nestedKeys],
+        shouldSort,
         threshold,
     });
 };

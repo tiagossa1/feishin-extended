@@ -82,6 +82,7 @@ export type PlaylistMoveEventPayload = {
 export type PlaylistReorderEventPayload = {
     edge: 'bottom' | 'top' | null;
     playlistId: string;
+    // Occurrence IDs (playlistItemId), not canonical song IDs.
     sourceIds: string[];
     targetId: string;
 };

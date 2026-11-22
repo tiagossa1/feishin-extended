@@ -101,7 +101,9 @@ export function usePlaylistTrackList(data: PlaylistSongListResponse | undefined)
         const raw = data?.items ?? [];
         let filtered = applyClientSideSongFilters(raw, query as Record<string, unknown>);
         if (searchTerm?.trim()) {
-            filtered = searchLibraryItems(filtered, searchTerm, LibraryItem.SONG);
+            filtered = searchLibraryItems(filtered, searchTerm, LibraryItem.SONG, {
+                shouldSort: false,
+            });
         }
         const sortBy = (query.sortBy as SongListSort) ?? SongListSort.ID;
         const sortOrder = (query.sortOrder as SortOrder) ?? SortOrder.ASC;

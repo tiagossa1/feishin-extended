@@ -332,7 +332,13 @@ try {
             'Dragging a column handle changes column order without sorting the playlist',
         );
         await page.goto(`${base}/#/library/songs`);
-        await titleSort.waitFor();
+        const libraryHeader = page.getByRole('columnheader').filter({ hasText: 'TITLE' }).first();
+        await libraryHeader.waitFor();
+        assert.equal(
+            await page.getByRole('button', { name: /^Sort by / }).count(),
+            0,
+            'Subsonic search3 cannot execute header ordering, including title',
+        );
         assert.equal(
             await page.getByRole('button', { exact: true, name: 'Sort by ALBUM' }).count(),
             0,
@@ -353,17 +359,17 @@ try {
                 localStorage.setItem('store_settings', JSON.stringify(settings));
             }, pagination);
             await page.reload();
-            await titleSort.waitFor();
-            const ascending =
-                (await titleSort.locator('..').getAttribute('aria-sort')) === 'ascending';
-            await titleSort.focus();
-            await titleSort.press('Enter');
-            await page.waitForURL(ascending ? '**sortOrder=DESC**' : '**sortOrder=ASC**');
-            await page
-                .locator(`[aria-sort="${ascending ? 'descending' : 'ascending'}"]`)
-                .filter({ has: titleSort })
-                .first()
-                .waitFor();
+            await libraryHeader.waitFor();
+            assert.equal(
+                await page.getByRole('button', { name: /^Sort by / }).count(),
+                0,
+                `${pagination} does not claim unsupported backend ordering`,
+            );
+            assert.equal(
+                await page.locator('.fs-item-list-pagination-module-pagination-container').count(),
+                pagination === 'paginated' ? 1 : 0,
+                'Both pagination modes are exercised',
+            );
             assert.equal(
                 await page.getByRole('button', { exact: true, name: 'Sort by ALBUM' }).count(),
                 0,

@@ -963,13 +963,16 @@ const ItemTableListStickyUI = memo(
 
             return (
                 <div
+                    aria-colcount={parsedColumns.length}
+                    aria-rowcount={1}
                     className={styles.stickyHeader}
                     ref={stickyHeaderRef}
+                    role="table"
                     style={{
                         top: `${stickyTop}px`,
                     }}
                 >
-                    <div className={styles.stickyHeaderRow}>
+                    <div aria-rowindex={1} className={styles.stickyHeaderRow} role="row">
                         {pinnedLeftColumnCount > 0 && (
                             <div
                                 className={clsx(

@@ -50,8 +50,9 @@ export const PlaylistDetailSongListGrid = forwardRef<any, PlaylistDetailSongList
         const songDataFromData = useMemo(() => {
             let list = data?.items || [];
             if (searchTerm) {
-                list = searchLibraryItems(list, searchTerm, LibraryItem.SONG);
-                return list;
+                list = searchLibraryItems(list, searchTerm, LibraryItem.SONG, {
+                    shouldSort: false,
+                });
             }
             return sortSongList(list, query.sortBy, query.sortOrder);
         }, [data?.items, searchTerm, query.sortBy, query.sortOrder]);

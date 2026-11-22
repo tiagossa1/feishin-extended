@@ -57,12 +57,8 @@ export const PlaylistDetailAlbumView = ({ data }: { data: PlaylistSongListRespon
         const filtered = applyClientSideSongFilters(raw, query as Record<string, unknown>);
 
         const searched = searchTerm?.trim()
-            ? searchLibraryItems(filtered, searchTerm, LibraryItem.SONG)
+            ? searchLibraryItems(filtered, searchTerm, LibraryItem.SONG, { shouldSort: false })
             : filtered;
-
-        if (searchTerm?.trim()) {
-            return searched;
-        }
 
         const sortBy = isRandomSort
             ? SongListSort.ALBUM

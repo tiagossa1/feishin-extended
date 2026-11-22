@@ -2,6 +2,7 @@ import { useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
 import { lazy, Suspense, useEffect, useMemo, useRef, useState } from 'react';
 import { useParams } from 'react-router';
 
+import { reorderPlaylistItems } from '/@/renderer/components/item-list/helpers/playlist-order';
 import { useItemListPagination } from '/@/renderer/components/item-list/item-list-pagination/use-item-list-pagination';
 import { ItemListHandle } from '/@/renderer/components/item-list/types';
 import { useListContext } from '/@/renderer/context/list-context';
@@ -178,52 +179,13 @@ export const PlaylistDetailSongListEdit = ({ data }: { data: PlaylistSongListRes
                     return prev;
                 }
 
-                // Create a list of IDs in current order
-                const currentIds = prev.items.map((item) => item.id);
-
-                // Find the target index
-                const targetIndex = currentIds.indexOf(payload.targetId);
-                if (targetIndex === -1) {
-                    return prev;
-                }
-
-                // Remove all source IDs from their current positions
-                const idsWithoutSources = currentIds.filter(
-                    (id) => !payload.sourceIds.includes(id),
+                const reorderedItems = reorderPlaylistItems(
+                    prev.items,
+                    payload.sourceIds,
+                    payload.targetId,
+                    payload.edge,
                 );
-
-                // Calculate the insertion index based on the original target position
-                const sourcesBeforeTarget = payload.sourceIds.filter((id) => {
-                    const sourceIndex = currentIds.indexOf(id);
-                    return sourceIndex !== -1 && sourceIndex < targetIndex;
-                }).length;
-
-                // Calculate the insert index in the filtered list
-                const insertIndexInFiltered =
-                    payload.edge === 'top'
-                        ? targetIndex - sourcesBeforeTarget
-                        : targetIndex - sourcesBeforeTarget + 1;
-
-                // Ensure insertIndex is within bounds
-                const insertIndex = Math.max(
-                    0,
-                    Math.min(insertIndexInFiltered, idsWithoutSources.length),
-                );
-
-                // Insert source IDs at the calculated position
-                const reorderedIds = [
-                    ...idsWithoutSources.slice(0, insertIndex),
-                    ...payload.sourceIds,
-                    ...idsWithoutSources.slice(insertIndex),
-                ];
-
-                // Create a map for quick lookup
-                const itemMap = new Map(prev.items.map((item) => [item.id, item]));
-
-                // Reorder items based on new ID order
-                const reorderedItems = reorderedIds
-                    .map((id) => itemMap.get(id))
-                    .filter((item): item is NonNullable<typeof item> => item !== undefined);
+                if (reorderedItems === prev.items) return prev;
 
                 return {
                     ...prev,

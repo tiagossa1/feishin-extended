@@ -1131,6 +1131,7 @@ export const TableColumnHeaderContainer = (
     },
 ) => {
     const columnConfig = props.columns[props.columnIndex];
+    const ariaLabelKey = columnAriaLabelKeys[props.type];
     const sortable =
         !!props.sort && !props.sort.disabled && props.sort.sortableColumnIds.includes(props.type);
     const sorted =
@@ -1252,6 +1253,9 @@ export const TableColumnHeaderContainer = (
 
     return (
         <Flex
+            {...props.ariaAttributes}
+            aria-colindex={props.columnIndex + 1}
+            aria-label={ariaLabelKey ? i18n.t(ariaLabelKey) : undefined}
             aria-sort={
                 sortable
                     ? sorted
@@ -1324,6 +1328,17 @@ export const TableColumnHeaderContainer = (
             )}
         </Flex>
     );
+};
+
+const columnAriaLabelKeys: Partial<Record<TableColumn, string>> = {
+    [TableColumn.ACTIONS]: 'table.config.label.actions',
+    [TableColumn.DISC_NUMBER]: 'table.config.label.discNumber',
+    [TableColumn.DURATION]: 'common.duration',
+    [TableColumn.IMAGE]: 'table.config.label.image',
+    [TableColumn.PLAYLIST_REORDER]: 'table.config.label.actions',
+    [TableColumn.ROW_INDEX]: 'table.config.label.rowIndex',
+    [TableColumn.USER_FAVORITE]: 'common.favorite',
+    [TableColumn.USER_RATING]: 'common.rating',
 };
 
 export const columnLabelMap: Record<TableColumn, ReactNode | string> = {
